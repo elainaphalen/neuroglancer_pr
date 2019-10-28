@@ -26,12 +26,13 @@ import {UserLayerWithCoordinateTransform, UserLayerWithCoordinateTransformMixin}
 import {verifyObjectProperty, verifyOptionalString} from 'neuroglancer/util/json';
 
 import {UserLayerWithProofread, UserLayerWithProofreadMixin} from 'neuroglancer/user_layer_with_proofread'
+import {UserLayerWithSearchDB, UserLayerWithSearchDBMixin} from 'neuroglancer/user_layer_with_neuron_db_search'
 
 const SOURCE_JSON_KEY = 'source';
 const CROSS_SECTION_RENDER_SCALE_JSON_KEY = 'crossSectionRenderScale';
 
 interface BaseConstructor {
-  new(...args: any[]): UserLayerWithAnnotations&UserLayerWithCoordinateTransform&UserLayerWithProofread;
+  new(...args: any[]): UserLayerWithAnnotations&UserLayerWithCoordinateTransform&UserLayerWithProofread&UserLayerWithSearchDB;
 }
 
 function helper<TBase extends BaseConstructor>(Base: TBase) {
@@ -85,7 +86,8 @@ function helper<TBase extends BaseConstructor>(Base: TBase) {
 
 export interface UserLayerWithVolumeSource extends UserLayerWithAnnotations,
                                                    UserLayerWithCoordinateTransform,
-                                                   UserLayerWithProofread {
+                                                   UserLayerWithProofread,
+                                                   UserLayerWithSearchDB {
   volumePath: string|undefined;
   multiscaleSource: Promise<MultiscaleVolumeChunkSource>|undefined;
   sliceViewRenderScaleHistogram: RenderScaleHistogram;
@@ -97,5 +99,5 @@ export interface UserLayerWithVolumeSource extends UserLayerWithAnnotations,
  */
 export function UserLayerWithVolumeSourceMixin<TBase extends {new (...args: any[]): UserLayer}>(
     Base: TBase) {
-  return helper(UserLayerWithProofreadMixin(UserLayerWithAnnotationsMixin(UserLayerWithCoordinateTransformMixin(Base))));
+  return helper(UserLayerWithSearchDBMixin(UserLayerWithProofreadMixin(UserLayerWithAnnotationsMixin(UserLayerWithCoordinateTransformMixin(Base)))));
 }
