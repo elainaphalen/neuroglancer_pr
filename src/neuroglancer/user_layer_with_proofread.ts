@@ -64,10 +64,13 @@ export function UserLayerWithProofreadMixin<TBase extends {new (...args: any[]):
 
     toJSON(): any {
       const x = super.toJSON();
-      x[NEURON_NAME_JSON_KEY] = this.neuronName.toJSON();
-      x[TAGS_JSON_KEY]= this.tags.toJSON();
-      x[LOC_TAGS_JSON_KEY]=this.loc_tags.toJSON();
-      x[ANNOTATOR_JSON_KEY]=this.annotator.toJSON();
+      
+      if(this.neuronName._value || this.tags._value || this.loc_tags._value || this.annotator._value){
+        x[NEURON_NAME_JSON_KEY] = this.neuronName.toJSON();
+        x[TAGS_JSON_KEY]= this.tags.toJSON();
+        x[LOC_TAGS_JSON_KEY]=this.loc_tags.toJSON();
+        x[ANNOTATOR_JSON_KEY]=this.annotator.toJSON();
+      }
       return x;
     }
   }
