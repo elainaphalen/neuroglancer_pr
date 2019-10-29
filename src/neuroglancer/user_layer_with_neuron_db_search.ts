@@ -105,15 +105,17 @@ export function UserLayerWithSearchDBMixin<TBase extends {new (...args: any[]): 
       // for updating GUI
       const x = super.toJSON();
       // x[SEARCH_NEURON_NAME_JSON_KEY] = this.dbNeuronName.toJSON();
-      x[SEARCH_PREFIX_JSON_KEY] = this.dbNeuronPrefix.toJSON();
-      x[SEARCH_ANNOTATOR_JSON_KEY]=this.dbFindAnnotator.toJSON();
-      x[SEARCH_TAGS_JSON_KEY]=this.dbFindTags.toJSON();
-      x[SEARCH_FINISHED_JSON_KEY]=this.dbFindFinished.toJSON();
-      x[SEARCH_REVIEWED_JSON_KEY]=this.dbFindReviewed.toJSON();
-      x[SEARCH_LOAD_NEURON_JSON_KEY]=this.dbLoadNeuronName.toJSON();
-      // x[SEARCH_TAGS_JSON_KEY]= this.dbTags.toJSON();
-      // x[SEARCH_LOC_SEARCH_TAGS_JSON_KEY]=this.dbLocTags.toJSON();
-      return x;
+      if(this.dbNeuronPrefix._value||this.dbFindAnnotator._value||this.dbFindTags.value||this.dbFindFinished.value||this.dbFindReviewed.value||this.dbLoadNeuronName){
+            x[SEARCH_PREFIX_JSON_KEY] = this.dbNeuronPrefix.toJSON();
+            x[SEARCH_ANNOTATOR_JSON_KEY]=this.dbFindAnnotator.toJSON();
+            x[SEARCH_TAGS_JSON_KEY]=this.dbFindTags.toJSON();
+            x[SEARCH_FINISHED_JSON_KEY]=this.dbFindFinished.toJSON();
+            x[SEARCH_REVIEWED_JSON_KEY]=this.dbFindReviewed.toJSON();
+            x[SEARCH_LOAD_NEURON_JSON_KEY]=this.dbLoadNeuronName.toJSON();
+            // x[SEARCH_TAGS_JSON_KEY]= this.dbTags.toJSON();
+            // x[SEARCH_LOC_SEARCH_TAGS_JSON_KEY]=this.dbLocTags.toJSON();
+          }
+          return x;
     }
   }
   return C;

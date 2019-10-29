@@ -15,6 +15,7 @@
  */
 
 import {TrackableString} from 'neuroglancer/trackable_string';
+import {TrackableBoolean} from 'neuroglancer/trackable_boolean'
 import {UserLayer} from 'neuroglancer/layer';
 import {ProofreadTab} from 'neuroglancer/widget/proofread_tab';
 
@@ -37,10 +38,10 @@ export interface UserLayerWithProofread extends UserLayer {
     prLocTags: TrackableString;
     prAnnotator: TrackableString;
     prNotes: TrackableString;
-    prFinished: TrackableString;
-    prReviewed: TrackableString;
+    prFinished: TrackableBoolean;
+    prReviewed: TrackableBoolean;
     prSomaLoc: TrackableString;
-    prOverrideSuperSetCheck: TrackableString;
+    prOverrideSuperSetCheck: TrackableBoolean;
 }
 
 /**
@@ -55,10 +56,10 @@ export function UserLayerWithProofreadMixin<TBase extends {new (...args: any[]):
     prLocTags = new TrackableString();
     prAnnotator = new TrackableString();
     prNotes = new TrackableString();
-    prFinished = new TrackableString();
-    prReviewed = new TrackableString();
+    prFinished = new TrackableBoolean(false);
+    prReviewed = new TrackableBoolean(false);
     prSomaLoc = new TrackableString();
-    prOverrideSuperSetCheck = new TrackableString();
+    prOverrideSuperSetCheck = new TrackableBoolean(false);
 
     constructor(...args: any[]) {
       super(...args);
@@ -106,7 +107,7 @@ export function UserLayerWithProofreadMixin<TBase extends {new (...args: any[]):
       const x = super.toJSON();
 
       
-      if(this.prNeuronName._value || this.prCellType._value ||this.prTags._value || this.prLocTags._value || this.prAnnotator._value || this.prNotes._value || this.prFinished._value || this.prReviewed._value || this.prSomaLoc._value){
+      if(this.prNeuronName._value || this.prCellType._value ||this.prTags._value || this.prLocTags._value || this.prAnnotator._value || this.prNotes._value || this.prFinished.value || this.prReviewed.value || this.prSomaLoc._value || this.prOverrideSuperSetCheck.value){
        
       x[NEURON_NAME_JSON_KEY] = this.prNeuronName.toJSON();
       x[CELL_TYPE_JSON_KEY] = this.prCellType.toJSON();

@@ -22,6 +22,8 @@ import './coordinate_transform.css';
 
 import {TrackableString} from 'neuroglancer/trackable_string';
 import {Tab} from 'neuroglancer/widget/tab_view';
+import {TrackableBoolean} from 'neuroglancer/trackable_boolean'
+
 
 export class ProofreadTab extends Tab {
   private prNeuronName = document.createElement('textarea');
@@ -31,10 +33,10 @@ export class ProofreadTab extends Tab {
   // private prLocTags = document.createElement('textarea');
   private prAnnotator = document.createElement('textarea');
   private prNotes = document.createElement('textarea');
-  private prFinished = document.createElement('textarea');
-  private prReviewed = document.createElement('textarea');
+  private prFinished = document.createElement('input');
+  private prReviewed = document.createElement('input');
   private prSomaLoc = document.createElement('textarea');
-  private prOverrideSuperSetCheck= document.createElement('textarea');
+  private prOverrideSuperSetCheck= document.createElement('input');
   
   constructor(
         public prNeuronNameString: TrackableString,
@@ -43,18 +45,21 @@ export class ProofreadTab extends Tab {
         public prLocTagsString: TrackableString,
         public prAnnotatorString: TrackableString,
         public prNotesString: TrackableString,
-        public prFinishedString: TrackableString,
-        public prReviewedString: TrackableString,
+        public prFinishedString: TrackableBoolean,
+        public prReviewedString: TrackableBoolean,
         public prSomaLocString: TrackableString,
-        public prOverrideSuperSetCheckString: TrackableString
+        public prOverrideSuperSetCheckString: TrackableBoolean
         ) {
     super();
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
 
     const div_prNeuronName = document.createElement('DIV');
+    div_prNeuronName.setAttribute('align','right');
     const {prNeuronName} = this;
     const prNeuronName_label = document.createElement("H3");
+    prNeuronName_label.style.padding = '0';
+    prNeuronName_label.style.margin = '0';
     prNeuronName_label.appendChild(document.createTextNode("Neuron name"));
     const prNeuronNameLabel = document.createElement('label');
     prNeuronNameLabel.className = 'neuroglancer-Proofread-homogeneous';
@@ -72,6 +77,7 @@ export class ProofreadTab extends Tab {
 
     // prCellType
     const div_prCellType = document.createElement('DIV');
+    div_prCellType.setAttribute('align','right');
     const {prCellType} = this;
     const prCellType_label = document.createElement("H3");
     prCellType_label.appendChild(document.createTextNode("Cell type"));
@@ -90,6 +96,7 @@ export class ProofreadTab extends Tab {
 
 
     const div_prTags = document.createElement('DIV');
+    div_prTags.setAttribute('align','right');
     const {prTags} = this;
     const prTags_label = document.createElement("H3");
     prTags_label.appendChild(document.createTextNode("Tags"));
@@ -108,6 +115,7 @@ export class ProofreadTab extends Tab {
     
 
     const div_prLocTags = document.createElement('DIV');
+    div_prLocTags.setAttribute('align','right');
     const {prLocTags} = this;
     const prLocTagsLabel = document.createElement('label');
     const Location_tags = document.createElement("H3");
@@ -128,8 +136,11 @@ export class ProofreadTab extends Tab {
     
     // prNotes
     const div_prNotes = document.createElement('DIV');
+    div_prNotes.setAttribute('align','right');
+  
     const {prNotes} = this;
     const prNotes_label = document.createElement("H3");
+    
     prNotes_label.appendChild(document.createTextNode("Notes"));
     const prNotesLabel = document.createElement('label');
     prNotesLabel.className = 'neuroglancer-Proofread-homogeneous';
@@ -146,46 +157,58 @@ export class ProofreadTab extends Tab {
     
     // prFinished
     const div_prFinished = document.createElement('DIV');
+    div_prFinished.setAttribute('align','right');
     const {prFinished} = this;
-    const prFinished_label = document.createElement("H3");
-    prFinished_label.appendChild(document.createTextNode("Finished"));
+    prFinished.type = 'checkbox'
     const prFinishedLabel = document.createElement('label');
     prFinishedLabel.className = 'neuroglancer-Proofread-homogeneous';
+    prFinishedLabel.textContent = 'Finished  '
     prFinishedLabel.appendChild(prFinished);
-    div_prFinished.appendChild(prFinished_label);
+    div_prFinished.appendChild(linebreak);
+    div_prFinished.appendChild(linebreak);
     div_prFinished.appendChild(prFinishedLabel);
     element.appendChild(div_prFinished);
     this.registerDisposer(prFinishedString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prFinished.addEventListener('save', () => this.updateModel());
-    prFinished.addEventListener('blur', () => this.updateModel());
+    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    prFinished.addEventListener('change',() => {
+            this.updateModel();
+            });
     prFinished.title = 'prFinished';
-    prFinished.rows = 1;
-    
+    prFinished.addEventListener('mousedown', (event: MouseEvent) => {
+            event.preventDefault();
+        });
+
     // prReviewed
     const div_prReviewed = document.createElement('DIV');
+    div_prReviewed.setAttribute('align','right');
     const {prReviewed} = this;
-    const prReviewed_label = document.createElement("H3");
-    prReviewed_label.appendChild(document.createTextNode("Reviewed"));
+    prReviewed.type = 'checkbox';
     const prReviewedLabel = document.createElement('label');
     prReviewedLabel.className = 'neuroglancer-Proofread-homogeneous';
+    prReviewedLabel.textContent = 'Reviewed  '
     prReviewedLabel.appendChild(prReviewed);
-    div_prReviewed.appendChild(prReviewed_label);
+    div_prReviewed.appendChild(linebreak);
+    div_prReviewed.appendChild(linebreak);
+    div_prReviewed.appendChild(linebreak);
     div_prReviewed.appendChild(prReviewedLabel);
     element.appendChild(div_prReviewed);
     this.registerDisposer(prReviewedString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prReviewed.addEventListener('save', () => this.updateModel());
-    prReviewed.addEventListener('blur', () => this.updateModel());
+    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    prFinished.addEventListener('change',() => {
+            this.updateModel();
+            });
     prReviewed.title = 'prReviewed';
-    prReviewed.rows = 1;
+    prFinished.addEventListener('mousedown', (event: MouseEvent) => {
+            event.preventDefault();
+        });
 
     // prSomaLoc
     const div_prSomaLoc = document.createElement('DIV');
+    div_prSomaLoc.setAttribute('align','right');
     const {prSomaLoc} = this;
     const prSomaLocLabel = document.createElement('label');
     prSomaLocLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prSomaLocLabel.textContent = 'Soma location';
+    prSomaLocLabel.textContent = 'Soma location  ';
     prSomaLocLabel.appendChild(prSomaLoc);
     div_prSomaLoc.appendChild(linebreak);
     div_prSomaLoc.appendChild(linebreak);
@@ -194,28 +217,37 @@ export class ProofreadTab extends Tab {
     this.registerDisposer(prSomaLocString.changed.add(() => this.updateView()));
     prSomaLoc.addEventListener('save', () => this.updateModel());
     prSomaLoc.addEventListener('blur', () => this.updateModel());
-    prSomaLoc.title = 'prSomaLoc';
+    prSomaLoc.title = 'prSomaLoc  ';
     prSomaLoc.rows = 1;
 
     // prOverrideSuperSetCheck
     const div_prOverrideSuperSetCheck = document.createElement('DIV');
+    div_prOverrideSuperSetCheck.setAttribute('align','right');
     const {prOverrideSuperSetCheck} = this;
+    prOverrideSuperSetCheck.type = 'checkbox';
     const prOverrideSuperSetCheckLabel = document.createElement('label');
     prOverrideSuperSetCheckLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prOverrideSuperSetCheckLabel.textContent = 'Override Set Check';
+    prOverrideSuperSetCheckLabel.textContent = 'Override Set Check  ';
     prOverrideSuperSetCheckLabel.appendChild(prOverrideSuperSetCheck);
     div_prOverrideSuperSetCheck.appendChild(linebreak);
     div_prOverrideSuperSetCheck.appendChild(linebreak);
     div_prOverrideSuperSetCheck.appendChild(prOverrideSuperSetCheckLabel);
     element.appendChild(div_prOverrideSuperSetCheck);
     this.registerDisposer(prOverrideSuperSetCheckString.changed.add(() => this.updateView()));
-    prOverrideSuperSetCheck.addEventListener('save', () => this.updateModel());
-    prOverrideSuperSetCheck.addEventListener('blur', () => this.updateModel());
+    prFinished.addEventListener('change',() => {
+            this.updateModel();
+            });
+    //prOverrideSuperSetCheck.addEventListener('save', () => this.updateModel());
+    //prOverrideSuperSetCheck.addEventListener('blur', () => this.updateModel());
     prOverrideSuperSetCheck.title = 'prOverrideSuperSetCheck';
-    prOverrideSuperSetCheck.rows = 1;
+    //prOverrideSuperSetCheck.rows = 1;
+    prFinished.addEventListener('mousedown', (event: MouseEvent) => {
+            event.preventDefault();
+        });
 
     // prAnnotator
     const div_prAnnotator = document.createElement('DIV');
+    div_prAnnotator.setAttribute('align','right');
     const {prAnnotator} = this;
     const prAnnotatorLabel = document.createElement('label');
     prAnnotatorLabel.className = 'neuroglancer-Proofread-homogeneous';
@@ -255,10 +287,10 @@ export class ProofreadTab extends Tab {
     this.prLocTags.value = '' + this.prLocTagsString._value;
     this.prAnnotator.value = '' + this.prAnnotatorString._value;
     this.prNotes.value = '' + this.prNotesString._value;
-    this.prFinished.value = '' + this.prFinishedString._value;
-    this.prReviewed.value = '' + this.prReviewedString._value;
+    this.prFinished.checked = this.prFinishedString.value;
+    this.prReviewed.checked = this.prReviewedString.value;
     this.prSomaLoc.value = '' + this.prSomaLocString._value;
-    this.prOverrideSuperSetCheck.value = '' + this.prOverrideSuperSetCheckString._value;
+    this.prOverrideSuperSetCheck.checked = this.prOverrideSuperSetCheckString.value;
   }
 
   private updateModel() {
@@ -270,10 +302,10 @@ export class ProofreadTab extends Tab {
     this.prLocTagsString._value=this.prLocTags.value;
     this.prAnnotatorString._value=this.prAnnotator.value;
     this.prNotesString._value=this.prNotes.value;
-    this.prFinishedString._value=this.prFinished.value;
-    this.prReviewedString._value=this.prReviewed.value;
+    this.prFinishedString.value =this.prFinished.checked;
+    this.prReviewedString.value=this.prReviewed.checked;
     this.prSomaLocString._value=this.prSomaLoc.value;
-    this.prOverrideSuperSetCheckString._value=this.prOverrideSuperSetCheck.value;
+    this.prOverrideSuperSetCheckString.value=this.prOverrideSuperSetCheck.checked;
 
     this.prNeuronNameString.changed.dispatch();
     this.prCellTypeString.changed.dispatch();
