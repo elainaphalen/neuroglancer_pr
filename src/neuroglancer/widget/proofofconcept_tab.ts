@@ -133,19 +133,22 @@ export class ProofOfConceptTab extends Tab {
   
   private updateView() {
    
-    /*for (let key in this.transform._value)
+    for (let key in this.transform._value)
     {
+      let field = this.m.get(key)!;
       let txt: string = this.transform._value[key];
-      if(txt){
-        try{
-          this.m.get(key)._value = '' + ;
+      if (field.nodeName == 'TEXTAREA'){
+        (<HTMLTextAreaElement>field).value = ''+txt;
+      }else if( field.nodeName == 'INPUT'){
+        if(JSON.parse(txt)){
+        (<HTMLInputElement>field).checked = true;
+        }else {
+        (<HTMLInputElement>field).checked = false;
+        }
+        //(<HTMLInputElement>field).checked = true
       }
-      catch{
-
-      }
-      }
-    }*/
-  
+    }
+  /*
     let txt1 : string= this.transform._value["prNeuronName"];
     if(txt1){
       this.textArea.value = '' + txt1;
@@ -205,7 +208,7 @@ export class ProofOfConceptTab extends Tab {
       this.textArea9.checked = true;
     }else {
       this.textArea9.checked = false;
-    }
+    }*/
     
   }
 
