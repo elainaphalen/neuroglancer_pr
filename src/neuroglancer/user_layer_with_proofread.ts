@@ -14,34 +14,14 @@
  * limitations under the License.
  */
 
-import {TrackableString} from 'neuroglancer/trackable_string';
-import {TrackableBoolean} from 'neuroglancer/trackable_boolean'
 import {UserLayer} from 'neuroglancer/layer';
+import {Proofread} from 'neuroglancer/proofread';
 import {ProofreadTab} from 'neuroglancer/widget/proofread_tab';
 
-const NEURON_NAME_JSON_KEY = 'prNeuronName';
-const CELL_TYPE_JSON_KEY = 'prCellType';
-const TAGS_JSON_KEY = 'prTags';
-const LOC_TAGS_JSON_KEY = 'prLocTags';
-const ANNOTATOR_JSON_KEY = 'prAnnotator';
-const NOTES_JSON_KEY = 'prNotes';
-const FINISHED_JSON_KEY = 'prFinished';
-const REVIEWED_JSON_KEY = 'prReviewed';
-const PROOFREAD_TAB_NAME = 'Proofread';
-const SOMA_LOC_JSON_KEY = 'prSomaLoc';
-const OVERRIDE_SUPERSET_CHECK_JSON_KEY = 'prOverrideSuperSetCheck';
+const PROOFREAD_KEY = 'pr';
 
 export interface UserLayerWithProofread extends UserLayer {
-    prNeuronName: TrackableString;
-    prCellType: TrackableString;
-    prTags: TrackableString;
-    prLocTags: TrackableString;
-    prAnnotator: TrackableString;
-    prNotes: TrackableString;
-    prFinished: TrackableBoolean;
-    prReviewed: TrackableBoolean;
-    prSomaLoc: TrackableString;
-    prOverrideSuperSetCheck: TrackableBoolean;
+    poc: Proofread;
 }
 
 /**
@@ -50,76 +30,22 @@ export interface UserLayerWithProofread extends UserLayer {
 export function UserLayerWithProofreadMixin<TBase extends {new (...args: any[]): UserLayer}>(
     Base: TBase) {
   class C extends Base implements UserLayerWithProofread {
-    prNeuronName = new TrackableString();
-    prCellType = new TrackableString();
-    prTags = new TrackableString();
-    prLocTags = new TrackableString();
-    prAnnotator = new TrackableString();
-    prNotes = new TrackableString();
-    prFinished = new TrackableBoolean(false);
-    prReviewed = new TrackableBoolean(false);
-    prSomaLoc = new TrackableString();
-    prOverrideSuperSetCheck = new TrackableBoolean(false);
+    poc = new Proofread();
 
     constructor(...args: any[]) {
       super(...args);
-      this.prNeuronName.changed.add(this.specificationChanged.dispatch);
-      this.prCellType.changed.add(this.specificationChanged.dispatch);
-      this.prTags.changed.add(this.specificationChanged.dispatch);
-      this.prLocTags.changed.add(this.specificationChanged.dispatch);
-      this.prAnnotator.changed.add(this.specificationChanged.dispatch);
-      this.prNotes.changed.add(this.specificationChanged.dispatch);
-      this.prFinished.changed.add(this.specificationChanged.dispatch);
-      this.prReviewed.changed.add(this.specificationChanged.dispatch);
-      this.prSomaLoc.changed.add(this.specificationChanged.dispatch);
-      this.prOverrideSuperSetCheck.changed.add(this.specificationChanged.dispatch);
-
-      this.tabs.add(PROOFREAD_TAB_NAME, {
-        label: PROOFREAD_TAB_NAME,
+      this.poc.changed.add(this.specificationChanged.dispatch);
+      this.tabs.add('Proofread', {
+        label: 'Proofread',
         order: 100,
-        getter: () => new ProofreadTab(
-          this.prNeuronName,
-          this.prCellType,
-          this.prTags,
-          this.prLocTags,
-          this.prAnnotator,
-          this.prNotes,
-          this.prFinished,
-          this.prReviewed,
-          this.prSomaLoc,
-          this.prOverrideSuperSetCheck
-          )
+        getter: () => new ProofreadTab(this.poc)
       });
       const specification = args[1];
-      this.prNeuronName.restoreState(specification[NEURON_NAME_JSON_KEY]);
-      this.prCellType.restoreState(specification[CELL_TYPE_JSON_KEY]);
-      this.prTags.restoreState(specification[TAGS_JSON_KEY]);
-      this.prLocTags.restoreState(specification[LOC_TAGS_JSON_KEY]);
-      this.prAnnotator.restoreState(specification[ANNOTATOR_JSON_KEY]);
-      this.prNotes.restoreState(specification[NOTES_JSON_KEY]);
-      this.prFinished.restoreState(specification[FINISHED_JSON_KEY]);
-      this.prReviewed.restoreState(specification[REVIEWED_JSON_KEY]);
-      this.prSomaLoc.restoreState(specification[SOMA_LOC_JSON_KEY]);
-      this.prOverrideSuperSetCheck.restoreState(specification[OVERRIDE_SUPERSET_CHECK_JSON_KEY]);
+      this.poc.restoreState(specification[PROOFREAD_KEY]);
     }
-
     toJSON(): any {
       const x = super.toJSON();
-
-      
-      if(this.prNeuronName._value || this.prCellType._value ||this.prTags._value || this.prLocTags._value || this.prAnnotator._value || this.prNotes._value || this.prFinished.value || this.prReviewed.value || this.prSomaLoc._value || this.prOverrideSuperSetCheck.value){
-       
-      x[NEURON_NAME_JSON_KEY] = this.prNeuronName.toJSON();
-      x[CELL_TYPE_JSON_KEY] = this.prCellType.toJSON();
-      x[TAGS_JSON_KEY]= this.prTags.toJSON();
-      x[LOC_TAGS_JSON_KEY]=this.prLocTags.toJSON();
-      x[ANNOTATOR_JSON_KEY]=this.prAnnotator.toJSON();
-      x[NOTES_JSON_KEY]=this.prNotes.toJSON();
-      x[FINISHED_JSON_KEY]=this.prFinished.toJSON();
-      x[REVIEWED_JSON_KEY]=this.prReviewed.toJSON();
-      x[SOMA_LOC_JSON_KEY]=this.prSomaLoc.toJSON();
-      x[OVERRIDE_SUPERSET_CHECK_JSON_KEY]=this.prOverrideSuperSetCheck.toJSON();
-      }
+      x[PROOFREAD_KEY] = this.poc.toJSON(); 
       return x;
     }
   }

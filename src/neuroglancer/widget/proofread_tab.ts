@@ -3,7 +3,7 @@
  * Copyright 2018 Google Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain prAnnotatorString copy of the License at
+ * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -15,310 +15,166 @@
  */
 
 /**
- * @file Tab for updating prAnnotatorString coordinate prNeuronNameString.
+ * @file Tab for updating a coordinate transform.
  */
 
 import './coordinate_transform.css';
 
-import {TrackableString} from 'neuroglancer/trackable_string';
+import {Proofread, IValue} from 'neuroglancer/proofread';
 import {Tab} from 'neuroglancer/widget/tab_view';
-import {TrackableBoolean} from 'neuroglancer/trackable_boolean'
 
+type titleType = 'H3' | 'label';
 
 export class ProofreadTab extends Tab {
-  private prNeuronName = document.createElement('textarea');
-  private prCellType = document.createElement('textarea');
-  private prTags = document.createElement('textarea');
-  private prLocTags = document.createElement('textarea');
-  // private prLocTags = document.createElement('textarea');
-  private prAnnotator = document.createElement('textarea');
-  private prNotes = document.createElement('textarea');
-  private prFinished = document.createElement('input');
-  private prReviewed = document.createElement('input');
-  private prSomaLoc = document.createElement('textarea');
-  private prOverrideSuperSetCheck= document.createElement('input');
   
-  constructor(
-        public prNeuronNameString: TrackableString,
-        public prCellTypeString: TrackableString,
-        public prTagsString: TrackableString,
-        public prLocTagsString: TrackableString,
-        public prAnnotatorString: TrackableString,
-        public prNotesString: TrackableString,
-        public prFinishedString: TrackableBoolean,
-        public prReviewedString: TrackableBoolean,
-        public prSomaLocString: TrackableString,
-        public prOverrideSuperSetCheckString: TrackableBoolean
-        ) {
+
+  m:Map<string,HTMLElement> = new Map();
+  
+  private textArea = document.createElement('textarea');
+  private textArea1 = document.createElement('textarea');
+  private textArea2 = document.createElement('textarea');
+  private textArea3 = document.createElement('textarea');
+  private textArea4 = document.createElement('textarea');
+  private textArea5 = document.createElement('textarea');
+  private textArea6 = document.createElement('input');
+  private textArea7 = document.createElement('input');
+  private textArea8 = document.createElement('textarea');
+  private textArea9 = document.createElement('input');
+
+ 
+  constructor(public transform: Proofread) {
     super();
+
+    this.m.set("prNeuronName",this.textArea);
+    this.m.set("prCellType",this.textArea1);
+    this.m.set("prTags",this.textArea2);
+    this.m.set("prLocTags",this.textArea3);
+    this.m.set("prAnnotator",this.textArea4);
+    this.m.set("prNotes",this.textArea5);
+    this.m.set("prFinished",this.textArea6);
+    this.m.set("prReviewed",this.textArea7);
+    this.m.set("prSomaLoc",this.textArea8);
+    this.m.set("prOverrideSuperSetCheck",this.textArea9);
+
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
 
-    const div_prNeuronName = document.createElement('DIV');
-    div_prNeuronName.setAttribute('align','right');
-    const {prNeuronName} = this;
-    const prNeuronName_label = document.createElement("H3");
-    prNeuronName_label.style.padding = '0';
-    prNeuronName_label.style.margin = '0';
-    prNeuronName_label.appendChild(document.createTextNode("Neuron name"));
-    const prNeuronNameLabel = document.createElement('label');
-    prNeuronNameLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prNeuronNameLabel.appendChild(prNeuronName);
-    div_prNeuronName.appendChild(prNeuronName_label);
-    div_prNeuronName.appendChild(prNeuronNameLabel);
-    element.appendChild(div_prNeuronName);
-    this.registerDisposer(prNeuronNameString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prNeuronName.addEventListener('save', () => this.updateModel());
-    prNeuronName.addEventListener('blur', () => this.updateModel());
-    prNeuronName.title = 'prNeuronName';
-    prNeuronName.rows = 1;
-
-
-    // prCellType
-    const div_prCellType = document.createElement('DIV');
-    div_prCellType.setAttribute('align','right');
-    const {prCellType} = this;
-    const prCellType_label = document.createElement("H3");
-    prCellType_label.appendChild(document.createTextNode("Cell type"));
-    const prCellTypeLabel = document.createElement('label');
-    prCellTypeLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prCellTypeLabel.appendChild(prCellType);
-    div_prCellType.appendChild(prCellType_label);
-    div_prCellType.appendChild(prCellTypeLabel);
-    element.appendChild(div_prCellType);
-    this.registerDisposer(prCellTypeString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prCellType.addEventListener('save', () => this.updateModel());
-    prCellType.addEventListener('blur', () => this.updateModel());
-    prCellType.title = 'prCellType';
-    prCellType.rows = 1;
-
-
-    const div_prTags = document.createElement('DIV');
-    div_prTags.setAttribute('align','right');
-    const {prTags} = this;
-    const prTags_label = document.createElement("H3");
-    prTags_label.appendChild(document.createTextNode("Tags"));
-    const prTagsLabel = document.createElement('label');
-    prTagsLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prTagsLabel.appendChild(prTags);
-    div_prTags.appendChild(prTags_label);
-    div_prTags.appendChild(prTagsLabel);
-    element.appendChild(div_prTags);
-    this.registerDisposer(prTagsString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prTags.addEventListener('save', () => this.updateModel());
-    prTags.addEventListener('blur', () => this.updateModel());
-    prTags.title = 'prTags';
-    prTags.rows = 3;
-    
-
-    const div_prLocTags = document.createElement('DIV');
-    div_prLocTags.setAttribute('align','right');
-    const {prLocTags} = this;
-    const prLocTagsLabel = document.createElement('label');
-    const Location_tags = document.createElement("H3");
-    const linebreak = document.createElement("br");
-    Location_tags.appendChild(document.createTextNode("Location tags"));
-    prLocTagsLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prLocTagsLabel.appendChild(prLocTags);
-    div_prLocTags.appendChild(Location_tags);
-    div_prLocTags.appendChild(prLocTagsLabel);
-    //div_prLocTags.appendChild(linebreak);
-    element.appendChild(div_prLocTags);
-    this.registerDisposer(prLocTagsString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prLocTags.addEventListener('save', () => this.updateModel());
-    prLocTags.addEventListener('blur', () => this.updateModel());
-    prLocTags.title = 'prLocTags';
-    prLocTags.rows = 3;
-    
-    // prNotes
-    const div_prNotes = document.createElement('DIV');
-    div_prNotes.setAttribute('align','right');
-  
-    const {prNotes} = this;
-    const prNotes_label = document.createElement("H3");
-    
-    prNotes_label.appendChild(document.createTextNode("Notes"));
-    const prNotesLabel = document.createElement('label');
-    prNotesLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prNotesLabel.appendChild(prNotes);
-    div_prNotes.appendChild(prNotes_label);
-    div_prNotes.appendChild(prNotesLabel);
-    element.appendChild(div_prNotes);
-    this.registerDisposer(prNotesString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prNotes.addEventListener('save', () => this.updateModel());
-    prNotes.addEventListener('blur', () => this.updateModel());
-    prNotes.title = 'prNotes';
-    prNotes.rows = 8;
-    
-    // prFinished
-    const div_prFinished = document.createElement('DIV');
-    div_prFinished.setAttribute('align','right');
-    const {prFinished} = this;
-    prFinished.type = 'checkbox'
-    const prFinishedLabel = document.createElement('label');
-    prFinishedLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prFinishedLabel.textContent = 'Finished  '
-    prFinishedLabel.appendChild(prFinished);
-    div_prFinished.appendChild(linebreak);
-    div_prFinished.appendChild(linebreak);
-    div_prFinished.appendChild(prFinishedLabel);
-    element.appendChild(div_prFinished);
-    this.registerDisposer(prFinishedString.changed.add(() => this.updateView()));
-    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prFinished.addEventListener('change',() => {
-            this.updateModel();
-            });
-    prFinished.title = 'prFinished';
-    prFinished.addEventListener('mousedown', (event: MouseEvent) => {
-            event.preventDefault();
-        });
-
-    // prReviewed
-    const div_prReviewed = document.createElement('DIV');
-    div_prReviewed.setAttribute('align','right');
-    const {prReviewed} = this;
-    prReviewed.type = 'checkbox';
-    const prReviewedLabel = document.createElement('label');
-    prReviewedLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prReviewedLabel.textContent = 'Reviewed  '
-    prReviewedLabel.appendChild(prReviewed);
-    div_prReviewed.appendChild(linebreak);
-    div_prReviewed.appendChild(linebreak);
-    div_prReviewed.appendChild(linebreak);
-    div_prReviewed.appendChild(prReviewedLabel);
-    element.appendChild(div_prReviewed);
-    this.registerDisposer(prReviewedString.changed.add(() => this.updateView()));
-    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    prFinished.addEventListener('change',() => {
-            this.updateModel();
-            });
-    prReviewed.title = 'prReviewed';
-    prFinished.addEventListener('mousedown', (event: MouseEvent) => {
-            event.preventDefault();
-        });
-
-    // prSomaLoc
-    const div_prSomaLoc = document.createElement('DIV');
-    div_prSomaLoc.setAttribute('align','right');
-    const {prSomaLoc} = this;
-    const prSomaLocLabel = document.createElement('label');
-    prSomaLocLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prSomaLocLabel.textContent = 'Soma location  ';
-    prSomaLocLabel.appendChild(prSomaLoc);
-    div_prSomaLoc.appendChild(linebreak);
-    div_prSomaLoc.appendChild(linebreak);
-    div_prSomaLoc.appendChild(prSomaLocLabel);
-    element.appendChild(div_prSomaLoc);
-    this.registerDisposer(prSomaLocString.changed.add(() => this.updateView()));
-    prSomaLoc.addEventListener('save', () => this.updateModel());
-    prSomaLoc.addEventListener('blur', () => this.updateModel());
-    prSomaLoc.title = 'prSomaLoc  ';
-    prSomaLoc.rows = 1;
-
-    // prOverrideSuperSetCheck
-    const div_prOverrideSuperSetCheck = document.createElement('DIV');
-    div_prOverrideSuperSetCheck.setAttribute('align','right');
-    const {prOverrideSuperSetCheck} = this;
-    prOverrideSuperSetCheck.type = 'checkbox';
-    const prOverrideSuperSetCheckLabel = document.createElement('label');
-    prOverrideSuperSetCheckLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prOverrideSuperSetCheckLabel.textContent = 'Override Set Check  ';
-    prOverrideSuperSetCheckLabel.appendChild(prOverrideSuperSetCheck);
-    div_prOverrideSuperSetCheck.appendChild(linebreak);
-    div_prOverrideSuperSetCheck.appendChild(linebreak);
-    div_prOverrideSuperSetCheck.appendChild(prOverrideSuperSetCheckLabel);
-    element.appendChild(div_prOverrideSuperSetCheck);
-    this.registerDisposer(prOverrideSuperSetCheckString.changed.add(() => this.updateView()));
-    prFinished.addEventListener('change',() => {
-            this.updateModel();
-            });
-    //prOverrideSuperSetCheck.addEventListener('save', () => this.updateModel());
-    //prOverrideSuperSetCheck.addEventListener('blur', () => this.updateModel());
-    prOverrideSuperSetCheck.title = 'prOverrideSuperSetCheck';
-    //prOverrideSuperSetCheck.rows = 1;
-    prFinished.addEventListener('mousedown', (event: MouseEvent) => {
-            event.preventDefault();
-        });
-
-    // prAnnotator
-    const div_prAnnotator = document.createElement('DIV');
-    div_prAnnotator.setAttribute('align','right');
-    const {prAnnotator} = this;
-    const prAnnotatorLabel = document.createElement('label');
-    prAnnotatorLabel.className = 'neuroglancer-Proofread-homogeneous';
-    prAnnotatorLabel.textContent = 'Annotator    ';
-    prAnnotatorLabel.appendChild(prAnnotator);
-    div_prAnnotator.appendChild(linebreak);
-    div_prAnnotator.appendChild(linebreak);
-    div_prAnnotator.appendChild(prAnnotatorLabel);
-    element.appendChild(div_prAnnotator);
-    this.registerDisposer(prAnnotatorString.changed.add(() => this.updateView()));
-    prAnnotator.addEventListener('save', () => this.updateModel());
-    prAnnotator.addEventListener('blur', () => this.updateModel());
-    prAnnotator.title = 'prAnnotator';
-    prAnnotator.rows = 1; 
-
-
-    /*const resetButton = document.createElement('button');
-    resetButton.textContent = 'Reset to Empty';
-    resetButton.addEventListener('click', () => this.reset());
-    element.appendChild(resetButton);*/
-    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    this.addTextField(this.textArea,'NeuronName','H3');
+    this.addTextField(this.textArea1,'Cell Type','H3');
+    this.addTextField(this.textArea2,'Tags','H3');
+    this.addTextField(this.textArea3,'Location Tags','H3');
+    this.addTextField(this.textArea4,'Annotator','H3');
+    this.addTextField(this.textArea5,'Notes','H3');
+    this.addCheckBox(this.textArea6,'Finished');
+    this.addCheckBox(this.textArea7,'Reviewed');
+    this.addTextField(this.textArea8,'Soma Location' ,'H3');
+    this.addCheckBox(this.textArea9,'Override Set Check');
     this.updateView();
+    
+   
   }
 
-  /*private reset(){
-    this.prNeuronNameString.reset();
-    this.prTagsString.reset();
-  }*/
+  private addCheckBox(cb:HTMLInputElement,title:string){
+    const linebreak = document.createElement("br");
+    const checkbox = cb;
+    const div_cbArea = document.createElement('DIV');
+    div_cbArea.setAttribute('align','right');
+    checkbox.type = 'checkbox';
+    const checkboxlabel = document.createElement('label');
+    checkboxlabel.textContent=title;
+    checkboxlabel.appendChild(checkbox);
+    div_cbArea.appendChild(linebreak);
+    div_cbArea.appendChild(linebreak);
+    div_cbArea.appendChild(checkboxlabel);
+    this.element.appendChild(div_cbArea);
+    this.registerDisposer(this.transform.changed.add(() => this.updateView()));
+    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    checkbox.addEventListener('change',() => {
+            this.updateModel();
+            });
+    checkbox.addEventListener('mousedown', (event: MouseEvent) => {
+            event.preventDefault();
+        });
 
-  private updateView() {
-    if (!this.visible) {
-      return;
+  }
+  private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType){
+    const txarea = tarea;
+    const div_textArea = document.createElement('DIV');
+    div_textArea.setAttribute('align','right');
+    txarea.setAttribute('size','50');
+    if(type === 'label'){
+    const textAreaLabel=document.createElement('label');
+    textAreaLabel.textContent = title;
+    textAreaLabel.appendChild(txarea);
+    div_textArea.appendChild(textAreaLabel);
     }
-    this.prNeuronName.value = '' + this.prNeuronNameString._value;
-    this.prCellType.value = '' + this.prCellTypeString._value;
-    this.prTags.value = '' + this.prTagsString._value;
-    this.prLocTags.value = '' + this.prLocTagsString._value;
-    this.prAnnotator.value = '' + this.prAnnotatorString._value;
-    this.prNotes.value = '' + this.prNotesString._value;
-    this.prFinished.checked = this.prFinishedString.value;
-    this.prReviewed.checked = this.prReviewedString.value;
-    this.prSomaLoc.value = '' + this.prSomaLocString._value;
-    this.prOverrideSuperSetCheck.checked = this.prOverrideSuperSetCheckString.value;
+    if(type === 'H3'){
+      const title_label = document.createElement('H3');
+      title_label.style.padding = '0';
+      title_label.style.margin='0';
+      title_label.appendChild(document.createTextNode(title));
+      div_textArea.appendChild(title_label);
+      div_textArea.appendChild(txarea);
+    }
+    
+    this.element.appendChild(div_textArea);
+    this.registerDisposer(this.transform.changed.add(() => this.updateView()));
+    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    txarea.addEventListener('save', () => this.updateModel());
+    txarea.addEventListener('blur', () => this.updateModel());
+    txarea.rows = 1;
+    try{
+    txarea.id = this.getKeyByValue(this.m,tarea)!;
+    }
+    catch{
+      txarea.id = "";
+    }
+  }
+  
+  
+  private updateView() {
+   
+    for (let key in this.transform._value)
+    {
+      let field = this.m.get(key)!;
+      let txt: string = this.transform._value[key];
+      if (field.nodeName == 'TEXTAREA'){
+        (<HTMLTextAreaElement>field).value = ''+txt;
+      }else if( field.nodeName == 'INPUT'){
+        if(JSON.parse(txt)){
+        (<HTMLInputElement>field).checked = true;
+        }else {
+        (<HTMLInputElement>field).checked = false;
+        }
+        //(<HTMLInputElement>field).checked = true
+      }
+    }
+      
   }
 
+  getKeyByValue(object:Map<string, HTMLElement>, value:HTMLElement) 
+     {return Object.keys(object).find(key => object.get(key) === value)};
+  
   private updateModel() {
-    try
+  try
     {
-    this.prNeuronNameString._value=this.prNeuronName.value;
-    this.prCellTypeString._value=this.prCellType.value;
-    this.prTagsString._value=this.prTags.value;
-    this.prLocTagsString._value=this.prLocTags.value;
-    this.prAnnotatorString._value=this.prAnnotator.value;
-    this.prNotesString._value=this.prNotes.value;
-    this.prFinishedString.value =this.prFinished.checked;
-    this.prReviewedString.value=this.prReviewed.checked;
-    this.prSomaLocString._value=this.prSomaLoc.value;
-    this.prOverrideSuperSetCheckString.value=this.prOverrideSuperSetCheck.checked;
-
-    this.prNeuronNameString.changed.dispatch();
-    this.prCellTypeString.changed.dispatch();
-    this.prTagsString.changed.dispatch();
-    this.prLocTagsString.changed.dispatch();
-    this.prAnnotatorString.changed.dispatch();
-    this.prNotesString.changed.dispatch();
-    this.prFinishedString.changed.dispatch();
-    this.prReviewedString.changed.dispatch();
-    this.prSomaLocString.changed.dispatch();
-    this.prOverrideSuperSetCheckString.changed.dispatch();
-
-    } catch {
+      let ta: IValue ={};
+      ta["prNeuronName"] = this.textArea.value;
+      ta['prCellType'] =this.textArea1.value;
+      ta['prTags'] =this.textArea2.value;
+      ta['prLocTags'] =this.textArea3.value;
+      ta['prAnnotator'] =this.textArea4.value;
+      ta['prNotes'] =this.textArea5.value;
+      if(this.textArea6.checked){ta['prFinished'] ="1"}else{ta['prFinished'] ="0"};
+      if(this.textArea7.checked){ta['prReviewed'] ="1"}else{ta['prReviewed'] ="0"};
+      ta['prSomaLoc'] =this.textArea8.value;
+      if(this.textArea9.checked){ta['prOverrideSuperSetCheck'] ="1"}else{ta['prOverrideSuperSetCheck'] ="0"};
+      
+      //let new_val: Array<IValue>= [ta,ta2];
+      this.transform._value = ta;
+      //this.transform._value=this.textArea.value;
+      this.transform.changed.dispatch();
+    }catch{
       this.updateView();
     }
   }

@@ -23,16 +23,17 @@ import {MultiscaleVolumeChunkSource} from 'neuroglancer/sliceview/volume/fronten
 import {TrackableValue} from 'neuroglancer/trackable_value';
 import {getAnnotationRenderOptions, UserLayerWithAnnotations, UserLayerWithAnnotationsMixin} from 'neuroglancer/ui/annotations';
 import {UserLayerWithCoordinateTransform, UserLayerWithCoordinateTransformMixin} from 'neuroglancer/user_layer_with_coordinate_transform';
+
 import {verifyObjectProperty, verifyOptionalString} from 'neuroglancer/util/json';
-import{UserLayerWithProofOfConcept,UserLayerWithProofOfConceptMixin} from 'neuroglancer/user_layer_with_proofOfConcept'
+
 import {UserLayerWithProofread, UserLayerWithProofreadMixin} from 'neuroglancer/user_layer_with_proofread'
-import {UserLayerWithSearchDB, UserLayerWithSearchDBMixin} from 'neuroglancer/user_layer_with_neuron_db_search'
+import {UserLayerWithNeurondb, UserLayerWithNeurondbMixin} from 'neuroglancer/user_layer_with_neuron_db_search'
 
 const SOURCE_JSON_KEY = 'source';
 const CROSS_SECTION_RENDER_SCALE_JSON_KEY = 'crossSectionRenderScale';
 
 interface BaseConstructor {
-  new(...args: any[]): UserLayerWithAnnotations&UserLayerWithCoordinateTransform&UserLayerWithProofread&UserLayerWithProofOfConcept&UserLayerWithSearchDB;
+  new(...args: any[]): UserLayerWithAnnotations&UserLayerWithCoordinateTransform&UserLayerWithProofread&UserLayerWithNeurondb;
 }
 
 function helper<TBase extends BaseConstructor>(Base: TBase) {
@@ -85,10 +86,9 @@ function helper<TBase extends BaseConstructor>(Base: TBase) {
 }
 
 export interface UserLayerWithVolumeSource extends UserLayerWithAnnotations,
-                                                   UserLayerWithProofOfConcept,
-                                                   UserLayerWithCoordinateTransform,
+                                                   UserLayerWithCoordinateTransform,   
                                                    UserLayerWithProofread,
-                                                   UserLayerWithSearchDB {
+                                                   UserLayerWithNeurondb {
   volumePath: string|undefined;
   multiscaleSource: Promise<MultiscaleVolumeChunkSource>|undefined;
   sliceViewRenderScaleHistogram: RenderScaleHistogram;
@@ -100,5 +100,5 @@ export interface UserLayerWithVolumeSource extends UserLayerWithAnnotations,
  */
 export function UserLayerWithVolumeSourceMixin<TBase extends {new (...args: any[]): UserLayer}>(
     Base: TBase) {
-  return helper(UserLayerWithProofOfConceptMixin(UserLayerWithSearchDBMixin(UserLayerWithProofreadMixin(UserLayerWithAnnotationsMixin(UserLayerWithCoordinateTransformMixin(Base))))));
+  return helper(UserLayerWithNeurondbMixin(UserLayerWithProofreadMixin(UserLayerWithAnnotationsMixin(UserLayerWithCoordinateTransformMixin(Base)))));
 }

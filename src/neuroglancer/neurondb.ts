@@ -28,24 +28,19 @@ export interface IValue{
   [details: string] : string;
 }
 
-export class Proofread implements WatchableValueInterface<IValue>{
+export class Neurondb implements WatchableValueInterface<IValue>{
   changed = new NullarySignal();
-  
   _value: IValue;
-
   constructor(){
     //maybe you can add to same dictionary instead of array of dictionary
     let textArea: IValue ={};
-    textArea["prNeuronName"]= "";
-    textArea["prCellType"]="";
-    textArea["prTags"]="";
-    textArea["prLocTags"]="";
-    textArea["prAnnotator"]="";
-    textArea["prNotes"]="";
-    textArea["prFinished"]="false";
-    textArea["prReviewed"]="false";
-    textArea["prSomaLoc"]="";
-    textArea["prOverrideSuperSetCheck"]="false";
+    textArea["dbNeuronPrefix"]= "";
+    textArea["dbFindAnnotator"]="";
+    textArea["dbFindTags"]="";
+    textArea["dbFindFinished"]="";
+    textArea["dbFindReviewed"]="";
+    textArea["dbFindResult"]="";
+    textArea["dbLoadNeuronName"]="";
 
     this._value =textArea;
   }
@@ -59,16 +54,13 @@ export class Proofread implements WatchableValueInterface<IValue>{
    */
   reset() {
    let empty: IValue ={};
-   empty["prNeuronName"]= "";
-    empty["prCellType"]="";
-    empty["prTags"]="";
-    empty["prLocTags"]="";
-    empty["prAnnotator"]="";
-    empty["prNotes"]="";
-    empty["prFinished"]="false";
-    empty["prReviewed"]="false";
-    empty["prSomaLoc"]="";
-    empty["prOverrideSuperSetCheck"]="false";
+    empty["dbNeuronPrefix"]= "";
+    empty["dbFindAnnotator"]="";
+    empty["dbFindTags"]="";
+    empty["dbFindFinished"]="";
+    empty["dbFindReviewed"]="";
+    empty["dbFindResult"]="";
+    empty["dbLoadNeuronName"]="";
    this._value = empty;
    this.changed.dispatch();
   }
@@ -88,7 +80,6 @@ export class Proofread implements WatchableValueInterface<IValue>{
       this.reset();
       return;
     }
-    
     try{
       this._value = x;
       this.changed.dispatch();

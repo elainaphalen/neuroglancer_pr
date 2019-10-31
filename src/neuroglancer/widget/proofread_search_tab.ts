@@ -15,209 +15,124 @@
  */
 
 /**
- * @file Tab for updating a coordinate dbNeuronPrefixString.
+ * @file Tab for updating a coordinate transform.
  */
 
 import './coordinate_transform.css';
 
-import {TrackableString} from 'neuroglancer/trackable_string';
+import {Neurondb, IValue} from 'neuroglancer/neurondb';
 import {Tab} from 'neuroglancer/widget/tab_view';
 
+type titleType = 'H3' | 'label';
+
 export class ProofreadSearchTab extends Tab {
-  private dbNeuronPrefix = document.createElement('textarea');
-  private dbFindAnnotator = document.createElement('textarea');
-  private dbFindTags = document.createElement('textarea');
-  private dbFindFinished = document.createElement('textarea');
-  private dbFindReviewed = document.createElement('textarea');
-  private dbFindResult = document.createElement('textarea');
-  private dbLoadNeuronName = document.createElement('textarea');
   
 
-  constructor(
-        public dbNeuronPrefixString: TrackableString,
-        public dbFindAnnotatorString: TrackableString,
-        public dbFindTagsString: TrackableString,
-        public dbFindFinishedString: TrackableString,
-        public dbFindReviewedString: TrackableString,
-        public dbFindResultString: TrackableString,
-        public dbLoadNeuronNameString: TrackableString
-        ) {
+  m:Map<string,HTMLElement> = new Map();
+  
+  private textArea = document.createElement('textarea');
+  private textArea1 = document.createElement('textarea');
+  private textArea2 = document.createElement('textarea');
+  private textArea3 = document.createElement('textarea');
+  private textArea4 = document.createElement('textarea');
+  private textArea5 = document.createElement('textarea');
+  private textArea6 = document.createElement('textarea');
+   
+  constructor(public transform: Neurondb) {
     super();
+
+    this.m.set("dbNeuronPrefix",this.textArea);
+    this.m.set("dbFindAnnotator",this.textArea1);
+    this.m.set("dbFindTags",this.textArea2);
+    this.m.set("dbFindFinished",this.textArea3);
+    this.m.set("dbFindReviewed",this.textArea4);
+    this.m.set("dbFindResult",this.textArea5);
+    this.m.set("dbLoadNeuronName",this.textArea6);
+    
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
 
-    const div_dbNeuronPrefix = document.createElement('DIV');
-    const {dbNeuronPrefix} = this;
-    const neuron_name = document.createElement("H3");
-    neuron_name.appendChild(document.createTextNode("By prefix"));
-    const dbNeuronPrefixLabel = document.createElement('label');
-    dbNeuronPrefixLabel.className = 'neuroglancer-Proofread-homogeneous';
-    dbNeuronPrefixLabel.appendChild(dbNeuronPrefix);
-    div_dbNeuronPrefix.appendChild(neuron_name);
-    div_dbNeuronPrefix.appendChild(dbNeuronPrefixLabel);
-    element.appendChild(div_dbNeuronPrefix);
-    this.registerDisposer(dbNeuronPrefixString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    dbNeuronPrefix.addEventListener('save', () => this.updateModel());
-    dbNeuronPrefix.addEventListener('blur', () => this.updateModel());
-    dbNeuronPrefix.title = 'dbNeuronPrefix';
-    dbNeuronPrefix.rows = 1;
-
-
-    const div_dbFindAnnotator = document.createElement('DIV');
-    const {dbFindAnnotator} = this;
-    const dbFindAnnotator_title = document.createElement("H3");
-    dbFindAnnotator_title.appendChild(document.createTextNode("By annotator"));
-    const dbFindAnnotator_box = document.createElement('label');
-    dbFindAnnotator_box.className = 'neuroglancer-Proofread-homogeneous';
-    dbFindAnnotator_box.appendChild(dbFindAnnotator);
-    div_dbFindAnnotator.appendChild(dbFindAnnotator_title);
-    div_dbFindAnnotator.appendChild(dbFindAnnotator_box);
-    element.appendChild(div_dbFindAnnotator);
-    this.registerDisposer(dbFindAnnotatorString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    dbFindAnnotator.addEventListener('save', () => this.updateModel());
-    dbFindAnnotator.addEventListener('blur', () => this.updateModel());
-    dbFindAnnotator.title = 'dbFindAnnotator';
-    dbFindAnnotator.rows = 1;
-
-    // dbFindTags
-    const div_dbFindTags = document.createElement('DIV');
-    const {dbFindTags} = this;
-    const dbFindTags_title = document.createElement("H3");
-    dbFindTags_title.appendChild(document.createTextNode("By tags"));
-    const dbFindTags_box = document.createElement('label');
-    dbFindTags_box.className = 'neuroglancer-Proofread-homogeneous';
-    dbFindTags_box.appendChild(dbFindTags);
-    div_dbFindTags.appendChild(dbFindTags_title);
-    div_dbFindTags.appendChild(dbFindTags_box);
-    element.appendChild(div_dbFindTags);
-    this.registerDisposer(dbFindTagsString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    dbFindTags.addEventListener('save', () => this.updateModel());
-    dbFindTags.addEventListener('blur', () => this.updateModel());
-    dbFindTags.title = 'dbFindTags';
-    dbFindTags.rows = 1;
-
-
-    // dbFindFinished
-    const div_dbFindFinished = document.createElement('DIV');
-    const {dbFindFinished} = this;
-    const dbFindFinished_title = document.createElement("H3");
-    dbFindFinished_title.appendChild(document.createTextNode("By finish status"));
-    const dbFindFinished_box = document.createElement('label');
-    dbFindFinished_box.className = 'neuroglancer-Proofread-homogeneous';
-    dbFindFinished_box.appendChild(dbFindFinished);
-    div_dbFindFinished.appendChild(dbFindFinished_title);
-    div_dbFindFinished.appendChild(dbFindFinished_box);
-    element.appendChild(div_dbFindFinished);
-    this.registerDisposer(dbFindFinishedString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    dbFindFinished.addEventListener('save', () => this.updateModel());
-    dbFindFinished.addEventListener('blur', () => this.updateModel());
-    dbFindFinished.title = 'dbFindFinished';
-    dbFindFinished.rows = 1;
-
-
-    // dbFindReviewed
-    const div_dbFindReviewed = document.createElement('DIV');
-    const {dbFindReviewed} = this;
-    const dbFindReviewed_title = document.createElement("H3");
-    dbFindReviewed_title.appendChild(document.createTextNode("By reviewed status"));
-    const dbFindReviewed_box = document.createElement('label');
-    dbFindReviewed_box.className = 'neuroglancer-Proofread-homogeneous';
-    dbFindReviewed_box.appendChild(dbFindReviewed);
-    div_dbFindReviewed.appendChild(dbFindReviewed_title);
-    div_dbFindReviewed.appendChild(dbFindReviewed_box);
-    element.appendChild(div_dbFindReviewed);
-    this.registerDisposer(dbFindReviewedString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    dbFindReviewed.addEventListener('save', () => this.updateModel());
-    dbFindReviewed.addEventListener('blur', () => this.updateModel());
-    dbFindReviewed.title = 'dbFindReviewed';
-    dbFindReviewed.rows = 1;
-
-
-    const div_dbFindResult = document.createElement('DIV');
-    const {dbFindResult} = this;
-    const tags = document.createElement("H3");
-    tags.appendChild(document.createTextNode("Search results"));
-    const dbFindResultLabel = document.createElement('label');
-    dbFindResultLabel.className = 'neuroglancer-Proofread-homogeneous';
-    dbFindResultLabel.appendChild(dbFindResult);
-    div_dbFindResult.appendChild(tags);
-    div_dbFindResult.appendChild(dbFindResultLabel);
-    element.appendChild(div_dbFindResult);
-    this.registerDisposer(dbFindResultString.changed.add(() => this.updateView()));
-    // this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    dbFindResult.addEventListener('save', () => this.updateModel());
-    dbFindResult.addEventListener('blur', () => this.updateModel());
-    dbFindResult.title = 'dbFindResult';
-    dbFindResult.rows = 3;
-
-
-    const div_dbLoadNeuronName = document.createElement('DIV');
-    const {dbLoadNeuronName} = this;
-    const dbLoadNeuronName_title = document.createElement("H3");
-    dbLoadNeuronName_title.appendChild(document.createTextNode("Load Neuron"));
-    const dbLoadNeuronName_box = document.createElement('label');
-    dbLoadNeuronName_box.className = 'neuroglancer-Proofread-homogeneous';
-    dbLoadNeuronName_box.appendChild(dbLoadNeuronName);
-    div_dbLoadNeuronName.appendChild(dbLoadNeuronName_title);
-    div_dbLoadNeuronName.appendChild(dbLoadNeuronName_box);
-    element.appendChild(div_dbLoadNeuronName);
-    this.registerDisposer(dbLoadNeuronNameString.changed.add(() => this.updateView()));
-    dbLoadNeuronName.addEventListener('save', () => this.updateModel());
-    dbLoadNeuronName.addEventListener('blur', () => this.updateModel());
-    dbLoadNeuronName.title = 'dbLoadNeuronName';
-    dbLoadNeuronName.rows = 1;
- 
-    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    this.addTextField(this.textArea,'NeuronName','H3');
+    this.addTextField(this.textArea1,'Cell Type','H3');
+    this.addTextField(this.textArea2,'Tags','H3');
+    this.addTextField(this.textArea3,'Location Tags','H3');
+    this.addTextField(this.textArea4,'Annotator','H3');
+    this.addTextField(this.textArea5,'Notes','H3');
+    this.addTextField(this.textArea6,'Finished','H3');
     this.updateView();
+    
+   
   }
 
-  /*private reset(){
-    this.dbNeuronPrefixString.reset();
-    this.dbFindResultString.reset();
-  }*/
-
-  private updateView() {
-    if (!this.visible) {
-      return;
+  private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType){
+    const txarea = tarea;
+    const div_textArea = document.createElement('DIV');
+    div_textArea.setAttribute('align','right');
+    if(type === 'label'){
+    const textAreaLabel=document.createElement('label');
+    textAreaLabel.textContent = title;
+    textAreaLabel.appendChild(txarea);
+    div_textArea.appendChild(textAreaLabel);
     }
-    this.dbNeuronPrefix.value = '' + this.dbNeuronPrefixString._value;
-    this.dbFindAnnotator.value = '' + this.dbFindAnnotatorString._value;
-    this.dbFindTags.value = '' + this.dbFindTagsString._value;
-    this.dbFindFinished.value = '' + this.dbFindFinishedString._value;
-    this.dbFindReviewed.value = '' + this.dbFindReviewedString._value;
-
-    this.dbFindResult.value = '' + this.dbFindResultString._value;
-
-    this.dbLoadNeuronName.value = '' + this.dbLoadNeuronNameString._value;
+    if(type === 'H3'){
+      const title_label = document.createElement('H3');
+      title_label.style.padding = '0';
+      title_label.style.margin='0';
+      title_label.appendChild(document.createTextNode(title));
+      div_textArea.appendChild(title_label);
+      div_textArea.appendChild(txarea);
+    }
+    this.element.appendChild(div_textArea);
+    this.registerDisposer(this.transform.changed.add(() => this.updateView()));
+    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    txarea.addEventListener('save', () => this.updateModel());
+    txarea.addEventListener('blur', () => this.updateModel());
+    txarea.rows = 1;
+    try{
+    txarea.id = this.getKeyByValue(this.m,tarea)!;
+    }
+    catch{
+      txarea.id = "";
+    }
   }
-
-  private updateModel() {
-    try
+  
+  private updateView() {
+    for (let key in this.transform._value)
     {
-    this.dbNeuronPrefixString._value=this.dbNeuronPrefix.value;
-
-    // dbFindAnnotator
-    this.dbFindAnnotatorString._value=this.dbFindAnnotator.value;
-    this.dbFindTagsString._value=this.dbFindTags.value;
-    this.dbFindFinishedString._value=this.dbFindFinished.value;
-    this.dbFindReviewedString._value=this.dbFindReviewed.value;
-
-    this.dbLoadNeuronNameString._value=this.dbLoadNeuronName.value;
-    this.dbNeuronPrefixString.changed.dispatch();
-    this.dbFindAnnotatorString.changed.dispatch();
-    this.dbFindTagsString.changed.dispatch();
-    this.dbFindFinishedString.changed.dispatch();
-    this.dbFindReviewedString.changed.dispatch();
-    this.dbLoadNeuronNameString.changed.dispatch();
-    // this.dbNeuronPrefixString._value=this.dbNeuronPrefix.value;
-    // this.dbNeuronPrefixString.changed.dispatch();
-    // this.dbFindResultString._value=this.dbFindResult.value;
-    // this.dbFindResultString.changed.dispatch();
+      let field = this.m.get(key)!;
+      let txt: string = this.transform._value[key];
+      if (field.nodeName == 'TEXTAREA'){
+        (<HTMLTextAreaElement>field).value = ''+txt;
+      }else if( field.nodeName == 'INPUT'){
+        if(JSON.parse(txt)){
+        (<HTMLInputElement>field).checked = true;
+        }else {
+        (<HTMLInputElement>field).checked = false;
+        }
+      }
+    }
+  
+    
+  }
+  getKeyByValue(object:Map<string, HTMLElement>, value:HTMLElement) 
+     {return Object.keys(object).find(key => object.get(key) === value)};
+  
+  private updateModel() {
+  try
+    {
+      let ta: IValue ={};
+      ta["dbNeuronPrefix"] = this.textArea.value;
+      ta['dbFindAnnotator'] =this.textArea1.value;
+      ta['dbFindTags'] =this.textArea2.value;
+      ta['dbFindFinished'] =this.textArea3.value;
+      ta['dbFindReviewed'] =this.textArea4.value;
+      ta['dbFindResult'] =this.textArea5.value;
+      ta['dbLoadNeuronName'] =this.textArea6.value;
+      
+      //let new_val: Array<IValue>= [ta,ta2];
+      this.transform._value = ta;
+      //this.transform._value=this.textArea.value;
+      this.transform.changed.dispatch();
     }catch{
       this.updateView();
     }
