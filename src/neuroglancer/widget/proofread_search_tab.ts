@@ -30,41 +30,41 @@ export class ProofreadSearchTab extends Tab {
 
   m:Map<string,HTMLElement> = new Map();
   
-  private textArea = document.createElement('textarea');
-  private textArea1 = document.createElement('textarea');
-  private textArea2 = document.createElement('textarea');
-  private textArea3 = document.createElement('textarea');
-  private textArea4 = document.createElement('textarea');
-  private textArea5 = document.createElement('textarea');
-  private textArea6 = document.createElement('textarea');
+  private dbNeuronPrefix = document.createElement('textarea');
+  private dbFindAnnotator = document.createElement('textarea');
+  private dbFindTags = document.createElement('textarea');
+  private dbFindFinished = document.createElement('textarea');
+  private dbFindReviewed = document.createElement('textarea');
+  private dbFindResult = document.createElement('textarea');
+  private dbLoadNeuronName = document.createElement('textarea');
    
   constructor(public transform: Neurondb) {
     super();
 
-    this.m.set("dbNeuronPrefix",this.textArea);
-    this.m.set("dbFindAnnotator",this.textArea1);
-    this.m.set("dbFindTags",this.textArea2);
-    this.m.set("dbFindFinished",this.textArea3);
-    this.m.set("dbFindReviewed",this.textArea4);
-    this.m.set("dbFindResult",this.textArea5);
-    this.m.set("dbLoadNeuronName",this.textArea6);
+    this.m.set("dbNeuronPrefix",this.dbNeuronPrefix);
+    this.m.set("dbFindAnnotator",this.dbFindAnnotator);
+    this.m.set("dbFindTags",this.dbFindTags);
+    this.m.set("dbFindFinished",this.dbFindFinished);
+    this.m.set("dbFindReviewed",this.dbFindReviewed);
+    this.m.set("dbFindResult",this.dbFindResult);
+    this.m.set("dbLoadNeuronName",this.dbLoadNeuronName);
     
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
 
-    this.addTextField(this.textArea,'NeuronName','H3');
-    this.addTextField(this.textArea1,'Cell Type','H3');
-    this.addTextField(this.textArea2,'Tags','H3');
-    this.addTextField(this.textArea3,'Location Tags','H3');
-    this.addTextField(this.textArea4,'Annotator','H3');
-    this.addTextField(this.textArea5,'Notes','H3');
-    this.addTextField(this.textArea6,'Finished','H3');
+    this.addTextField(this.dbNeuronPrefix,'NeuronName','H3');
+    this.addTextField(this.dbFindAnnotator,'Cell Type','H3');
+    this.addTextField(this.dbFindTags,'Tags','H3');
+    this.addTextField(this.dbFindFinished,'Location Tags','H3');
+    this.addTextField(this.dbFindReviewed,'Annotator','H3');
+    this.addTextField(this.dbFindResult,'Notes','H3');
+    this.addTextField(this.dbLoadNeuronName,'Finished','H3');
     this.updateView();
     
    
   }
 
-  private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType){
+  private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType, rows:number = 3){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
     div_textArea.setAttribute('align','right');
@@ -94,6 +94,7 @@ export class ProofreadSearchTab extends Tab {
     catch{
       txarea.id = "";
     }
+    txarea.rows = rows;
   }
   
   private updateView() {
@@ -121,13 +122,13 @@ export class ProofreadSearchTab extends Tab {
   try
     {
       let ta: IValue ={};
-      ta["dbNeuronPrefix"] = this.textArea.value;
-      ta['dbFindAnnotator'] =this.textArea1.value;
-      ta['dbFindTags'] =this.textArea2.value;
-      ta['dbFindFinished'] =this.textArea3.value;
-      ta['dbFindReviewed'] =this.textArea4.value;
-      ta['dbFindResult'] =this.textArea5.value;
-      ta['dbLoadNeuronName'] =this.textArea6.value;
+      ta["dbNeuronPrefix"] = this.dbNeuronPrefix.value;
+      ta['dbFindAnnotator'] =this.dbFindAnnotator.value;
+      ta['dbFindTags'] =this.dbFindTags.value;
+      ta['dbFindFinished'] =this.dbFindFinished.value;
+      ta['dbFindReviewed'] =this.dbFindReviewed.value;
+      ta['dbFindResult'] =this.dbFindResult.value;
+      ta['dbLoadNeuronName'] =this.dbLoadNeuronName.value;
       
       //let new_val: Array<IValue>= [ta,ta2];
       this.transform._value = ta;

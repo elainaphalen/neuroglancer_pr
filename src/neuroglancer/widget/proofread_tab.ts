@@ -30,45 +30,48 @@ export class ProofreadTab extends Tab {
 
   m:Map<string,HTMLElement> = new Map();
   
-  private textArea = document.createElement('textarea');
+  private prNeuronName = document.createElement('textarea');
   private textArea1 = document.createElement('textarea');
-  private textArea2 = document.createElement('textarea');
-  private textArea3 = document.createElement('textarea');
-  private textArea4 = document.createElement('textarea');
-  private textArea5 = document.createElement('textarea');
-  private textArea6 = document.createElement('input');
-  private textArea7 = document.createElement('input');
-  private textArea8 = document.createElement('textarea');
-  private textArea9 = document.createElement('input');
+  private prTags = document.createElement('textarea');
+  private prLocTags = document.createElement('textarea');
+  private prAnnotator = document.createElement('textarea');
+  private prNotes = document.createElement('textarea');
+  private prFinished = document.createElement('input');
+  private prReviewed = document.createElement('input');
+  private prSomaLoc = document.createElement('textarea');
+  private prOverrideSuperSetCheck = document.createElement('input');
+  private text = document.createElement('textarea');
 
  
   constructor(public transform: Proofread) {
     super();
 
-    this.m.set("prNeuronName",this.textArea);
+    this.m.set("prNeuronName",this.prNeuronName);
     this.m.set("prCellType",this.textArea1);
-    this.m.set("prTags",this.textArea2);
-    this.m.set("prLocTags",this.textArea3);
-    this.m.set("prAnnotator",this.textArea4);
-    this.m.set("prNotes",this.textArea5);
-    this.m.set("prFinished",this.textArea6);
-    this.m.set("prReviewed",this.textArea7);
-    this.m.set("prSomaLoc",this.textArea8);
-    this.m.set("prOverrideSuperSetCheck",this.textArea9);
+    this.m.set("prTags",this.prTags);
+    this.m.set("prLocTags",this.prLocTags);
+    this.m.set("prAnnotator",this.prAnnotator);
+    this.m.set("prNotes",this.prNotes);
+    this.m.set("prFinished",this.prFinished);
+    this.m.set("prReviewed",this.prReviewed);
+    this.m.set("prSomaLoc",this.prSomaLoc);
+    this.m.set("prOverrideSuperSetCheck",this.prOverrideSuperSetCheck);
+    this.m.set("text",this.text);
 
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
 
-    this.addTextField(this.textArea,'NeuronName','H3');
+    this.addTextField(this.prNeuronName,'NeuronName','H3');
     this.addTextField(this.textArea1,'Cell Type','H3');
-    this.addTextField(this.textArea2,'Tags','H3');
-    this.addTextField(this.textArea3,'Location Tags','H3');
-    this.addTextField(this.textArea4,'Annotator','H3');
-    this.addTextField(this.textArea5,'Notes','H3');
-    this.addCheckBox(this.textArea6,'Finished');
-    this.addCheckBox(this.textArea7,'Reviewed');
-    this.addTextField(this.textArea8,'Soma Location' ,'H3');
-    this.addCheckBox(this.textArea9,'Override Set Check');
+    this.addTextField(this.prTags,'Tags','H3');
+    this.addTextField(this.prLocTags,'Location Tags','H3');
+    this.addTextField(this.prAnnotator,'Annotator','H3');
+    this.addTextField(this.prNotes,'Notes','H3');
+    this.addCheckBox(this.prFinished,'Finished');
+    this.addCheckBox(this.prReviewed,'Reviewed');
+    this.addTextField(this.prSomaLoc,'Soma Location' ,'H3');
+    this.addTextField(this.text,'text','H3');
+    this.addCheckBox(this.prOverrideSuperSetCheck,'Override Set Check');
     this.updateView();
     
    
@@ -97,11 +100,11 @@ export class ProofreadTab extends Tab {
         });
 
   }
-  private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType){
+  private addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number =3 ){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
     div_textArea.setAttribute('align','right');
-    txarea.setAttribute('size','50');
+    
     if(type === 'label'){
     const textAreaLabel=document.createElement('label');
     textAreaLabel.textContent = title;
@@ -122,7 +125,7 @@ export class ProofreadTab extends Tab {
     this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
     txarea.addEventListener('save', () => this.updateModel());
     txarea.addEventListener('blur', () => this.updateModel());
-    txarea.rows = 1;
+    txarea.rows = rows;
     try{
     txarea.id = this.getKeyByValue(this.m,tarea)!;
     }
@@ -159,16 +162,17 @@ export class ProofreadTab extends Tab {
   try
     {
       let ta: IValue ={};
-      ta["prNeuronName"] = this.textArea.value;
+      ta["prNeuronName"] = this.prNeuronName.value;
       ta['prCellType'] =this.textArea1.value;
-      ta['prTags'] =this.textArea2.value;
-      ta['prLocTags'] =this.textArea3.value;
-      ta['prAnnotator'] =this.textArea4.value;
-      ta['prNotes'] =this.textArea5.value;
-      if(this.textArea6.checked){ta['prFinished'] ="1"}else{ta['prFinished'] ="0"};
-      if(this.textArea7.checked){ta['prReviewed'] ="1"}else{ta['prReviewed'] ="0"};
-      ta['prSomaLoc'] =this.textArea8.value;
-      if(this.textArea9.checked){ta['prOverrideSuperSetCheck'] ="1"}else{ta['prOverrideSuperSetCheck'] ="0"};
+      ta['prTags'] =this.prTags.value;
+      ta['prLocTags'] =this.prLocTags.value;
+      ta['prAnnotator'] =this.prAnnotator.value;
+      ta['prNotes'] =this.prNotes.value;
+      ta['text'] = this.text.value;
+      if(this.prFinished.checked){ta['prFinished'] ="1"}else{ta['prFinished'] ="0"};
+      if(this.prReviewed.checked){ta['prReviewed'] ="1"}else{ta['prReviewed'] ="0"};
+      ta['prSomaLoc'] =this.prSomaLoc.value;
+      if(this.prOverrideSuperSetCheck.checked){ta['prOverrideSuperSetCheck'] ="1"}else{ta['prOverrideSuperSetCheck'] ="0"};
       
       //let new_val: Array<IValue>= [ta,ta2];
       this.transform._value = ta;

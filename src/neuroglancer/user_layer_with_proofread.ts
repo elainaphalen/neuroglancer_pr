@@ -16,12 +16,20 @@
 
 import {UserLayer} from 'neuroglancer/layer';
 import {Proofread} from 'neuroglancer/proofread';
+//import {Neurondb} from 'neuroglancer/neurondb';
 import {ProofreadTab} from 'neuroglancer/widget/proofread_tab';
+//import {ProofreadSearchTab} from 'neuroglancer/widget/proofread_search_tab';
 
+
+const PROOFREAD_TAB_NAME = 'Proofread';
 const PROOFREAD_KEY = 'pr';
+//const NEURONDB_KEY = 'neurondb';
+//const SEARCH_TAB_NAME = 'Search DB';
+
 
 export interface UserLayerWithProofread extends UserLayer {
-    poc: Proofread;
+    pr: Proofread;
+    //sr: Neurondb;
 }
 
 /**
@@ -30,22 +38,35 @@ export interface UserLayerWithProofread extends UserLayer {
 export function UserLayerWithProofreadMixin<TBase extends {new (...args: any[]): UserLayer}>(
     Base: TBase) {
   class C extends Base implements UserLayerWithProofread {
-    poc = new Proofread();
-
+    pr = new Proofread();
+    //sr = new Neurondb();
+   
     constructor(...args: any[]) {
       super(...args);
-      this.poc.changed.add(this.specificationChanged.dispatch);
-      this.tabs.add('Proofread', {
-        label: 'Proofread',
+      
+      this.pr.changed.add(this.specificationChanged.dispatch);
+      this.tabs.add(PROOFREAD_TAB_NAME, {
+        label: PROOFREAD_TAB_NAME,
         order: 100,
-        getter: () => new ProofreadTab(this.poc)
+        getter: () => new ProofreadTab(this.pr)
       });
       const specification = args[1];
-      this.poc.restoreState(specification[PROOFREAD_KEY]);
+      this.pr.restoreState(specification[PROOFREAD_KEY]);
+      /*this.sr.changed.add(this.specificationChanged.dispatch);
+      this.tabs.add(PROOFREAD_TAB_NAME, {
+        label: SEARCH_TAB_NAME,
+        order: 100,
+        getter: () => new ProofreadSearchTab(this.sr)
+      });
+        */    
+      //this.sr.restoreState(args[2][NEURONDB_KEY]);
+    
+
     }
     toJSON(): any {
       const x = super.toJSON();
-      x[PROOFREAD_KEY] = this.poc.toJSON(); 
+      x[PROOFREAD_KEY] = this.pr.toJSON();
+      //x[NEURONDB_KEY] = this.sr.toJSON(); 
       return x;
     }
   }

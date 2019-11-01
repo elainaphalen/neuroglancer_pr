@@ -86,9 +86,10 @@ function helper<TBase extends BaseConstructor>(Base: TBase) {
 }
 
 export interface UserLayerWithVolumeSource extends UserLayerWithAnnotations,
-                                                   UserLayerWithCoordinateTransform,   
-                                                   UserLayerWithProofread,
-                                                   UserLayerWithNeurondb {
+                                                   UserLayerWithCoordinateTransform,
+                                                   UserLayerWithNeurondb,   
+                                                   UserLayerWithProofread
+                                                    {
   volumePath: string|undefined;
   multiscaleSource: Promise<MultiscaleVolumeChunkSource>|undefined;
   sliceViewRenderScaleHistogram: RenderScaleHistogram;
