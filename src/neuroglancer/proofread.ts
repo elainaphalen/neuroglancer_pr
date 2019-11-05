@@ -46,7 +46,7 @@ export class Proofread implements WatchableValueInterface<IValue>{
     textArea["prReviewed"]="false";
     textArea["prSomaLoc"]="";
     textArea["prOverrideSuperSetCheck"]="false";
-    textArea['text']="";
+    // textArea['text']="";
 
     this._value =textArea;
   }
@@ -70,7 +70,7 @@ export class Proofread implements WatchableValueInterface<IValue>{
     empty["prReviewed"]="false";
     empty["prSomaLoc"]="";
     empty["prOverrideSuperSetCheck"]="false";
-    empty['text']='';
+    // empty['text']='';
    this._value = empty;
    this.changed.dispatch();
   }
