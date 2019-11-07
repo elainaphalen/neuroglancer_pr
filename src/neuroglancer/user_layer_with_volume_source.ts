@@ -26,6 +26,7 @@ import {UserLayerWithCoordinateTransform, UserLayerWithCoordinateTransformMixin}
 
 import {verifyObjectProperty, verifyOptionalString} from 'neuroglancer/util/json';
 
+import {UserLayerWithColor, UserLayerWithColorMixin} from 'neuroglancer/user_layer_with_color'
 import {UserLayerWithProofread, UserLayerWithProofreadMixin} from 'neuroglancer/user_layer_with_proofread'
 import {UserLayerWithNeurondb, UserLayerWithNeurondbMixin} from 'neuroglancer/user_layer_with_neuron_db_search'
 
@@ -33,7 +34,7 @@ const SOURCE_JSON_KEY = 'source';
 const CROSS_SECTION_RENDER_SCALE_JSON_KEY = 'crossSectionRenderScale';
 
 interface BaseConstructor {
-  new(...args: any[]): UserLayerWithAnnotations&UserLayerWithCoordinateTransform&UserLayerWithProofread&UserLayerWithNeurondb;
+  new(...args: any[]): UserLayerWithAnnotations&UserLayerWithColor&UserLayerWithCoordinateTransform&UserLayerWithProofread&UserLayerWithNeurondb;
 }
 
 function helper<TBase extends BaseConstructor>(Base: TBase) {
@@ -87,6 +88,7 @@ function helper<TBase extends BaseConstructor>(Base: TBase) {
 
 export interface UserLayerWithVolumeSource extends UserLayerWithAnnotations,
                                                    UserLayerWithCoordinateTransform,
+                                                   UserLayerWithColor,
                                                    UserLayerWithNeurondb,   
                                                    UserLayerWithProofread
                                                     {
@@ -101,5 +103,5 @@ export interface UserLayerWithVolumeSource extends UserLayerWithAnnotations,
  */
 export function UserLayerWithVolumeSourceMixin<TBase extends {new (...args: any[]): UserLayer}>(
     Base: TBase) {
-  return helper(UserLayerWithNeurondbMixin(UserLayerWithProofreadMixin(UserLayerWithAnnotationsMixin(UserLayerWithCoordinateTransformMixin(Base)))));
+  return helper(UserLayerWithNeurondbMixin(UserLayerWithProofreadMixin(UserLayerWithColorMixin(UserLayerWithAnnotationsMixin(UserLayerWithCoordinateTransformMixin(Base))))));
 }
