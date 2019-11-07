@@ -52,19 +52,19 @@ export class ProofreadSearchTab extends Tab {
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
 
-    this.addTextField(this.dbNeuronPrefix,'NeuronName','H3');
-    this.addTextField(this.dbFindAnnotator,'Cell Type','H3');
+    this.addTextField(this.dbNeuronPrefix,'Prefix','H3');
+    this.addTextField(this.dbFindAnnotator,'Annotator','H3');
     this.addTextField(this.dbFindTags,'Tags','H3');
-    this.addTextField(this.dbFindFinished,'Location Tags','H3');
-    this.addTextField(this.dbFindReviewed,'Annotator','H3');
-    this.addTextField(this.dbFindResult,'Notes','H3');
-    this.addTextField(this.dbLoadNeuronName,'Finished','H3');
+    this.addTextField(this.dbFindFinished,'Finished','H3');
+    this.addTextField(this.dbFindReviewed,'Reviewed','H3');
+    this.addTextField(this.dbFindResult,'Result','H3', 8);
+    this.addTextField(this.dbLoadNeuronName,'Load Neuron','H3');
     this.updateView();
     
    
   }
 
-  private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType, rows:number = 3){
+  private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType, rows:number = 1){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
     div_textArea.setAttribute('align','right');
