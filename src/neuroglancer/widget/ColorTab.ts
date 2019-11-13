@@ -43,7 +43,7 @@ export class ColorTab extends Tab {
     this.m.set("Clear",this.clClear);
     
     const {element} = this;
-    element.classList.add('neuroglancer-Proofread-widget');
+    element.classList.add('neuroglancer-Color-widget');
     
     this.addTextField(this.clColVal,'Color value','H3');
     this.addInputElement(this.clSetVal,'Set color value to selections','button','clSetVal');
@@ -82,7 +82,7 @@ export class ColorTab extends Tab {
             this.updateModel();
             });
   }
-  
+
   private addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number =3 ){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');

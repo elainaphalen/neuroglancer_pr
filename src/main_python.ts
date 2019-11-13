@@ -183,25 +183,30 @@ window.addEventListener('DOMContentLoaded', () => {
       (action, state) => serverConnection.sendActionNotification(action, state));
   screenshotHandler.sendScreenshotRequested.add(
       state => serverConnection.sendActionNotification('screenshot', state));
-  
-  document.addEventListener("mousedown",()=>{
+ 
+
+  function waitForColorTab(selector:string, time:number) {
     const ele =document.getElementById('clSetVal');
     const cl = document.getElementById('clClear');
-    if(ele){
-        (<HTMLInputElement>ele).addEventListener('mousedown',()=>{
-          remoteActionHandler.sendActionRequested.dispatch('show_button_press',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
-        })}
-    if(cl){
-        (<HTMLInputElement>cl).addEventListener('mousedown',()=>{
-          remoteActionHandler.sendActionRequested.dispatch('clClear',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+        if(document.querySelector(selector)!=null) {
+            if(ele){
+            (<HTMLInputElement>ele).addEventListener('mousedown',()=>{
+            remoteActionHandler.sendActionRequested.dispatch('show_button_press',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+            })}
+          if(cl){
+            (<HTMLInputElement>cl).addEventListener('mousedown',()=>{
+            remoteActionHandler.sendActionRequested.dispatch('clClear',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
         })
-
     }
-  })
+        }
+        else {
+            setTimeout(function() {
+                waitForColorTab(selector, time);
+            }, time);
+        }
+    }
   
-  
-  
-  
+  waitForColorTab(".neuroglancer-Color-widget",1000)
 
   bindDefaultCopyHandler(viewer);
   bindDefaultPasteHandler(viewer);
