@@ -20,10 +20,11 @@
 
 import './coordinate_transform.css';
 
-import {ProofOfConcept, IValue} from 'neuroglancer/proofofconcept';
+import {ProofOfConcept} from 'neuroglancer/proofofconcept';
 import {Tab} from 'neuroglancer/widget/tab_view';
 
 type titleType = 'H3' | 'label';
+type buttonType = 'checkbox'|'button';
 
 export class ProofOfConceptTab extends Tab {
   
@@ -65,38 +66,46 @@ export class ProofOfConceptTab extends Tab {
     this.addTextField(this.textArea3,'Location Tags','H3');
     this.addTextField(this.textArea4,'Annotator','H3');
     this.addTextField(this.textArea5,'Notes','H3');
-    this.addCheckBox(this.textArea6,'Finished');
-    this.addCheckBox(this.textArea7,'Reviewed');
+    this.addInputElement(this.textArea6,'Finished',"checkbox");
+    this.addInputElement(this.textArea7,'Reviewed',"checkbox");
     this.addTextField(this.textArea8,'Soma Location' ,'H3');
-    this.addCheckBox(this.textArea9,'Override Set Check');
-    this.updateView();
-    
-   
+    this.addInputElement(this.textArea9,'Override Set Check',"checkbox");
+    this.updateView();   
   }
 
-  private addCheckBox(cb:HTMLInputElement,title:string){
+  private addInputElement(inp:HTMLInputElement,title:string,type:buttonType,id?:string){
     const linebreak = document.createElement("br");
-    const checkbox = cb;
-    const div_cbArea = document.createElement('DIV');
-    div_cbArea.setAttribute('align','right');
-    checkbox.type = 'checkbox';
-    const checkboxlabel = document.createElement('label');
-    checkboxlabel.textContent=title;
-    checkboxlabel.appendChild(checkbox);
-    div_cbArea.appendChild(linebreak);
-    div_cbArea.appendChild(linebreak);
-    div_cbArea.appendChild(checkboxlabel);
-    this.element.appendChild(div_cbArea);
+    const input = inp;
+    const div_inpArea = document.createElement('DIV');
+    div_inpArea.setAttribute('align','right');
+    input.type = type;
+
+    if(type === 'checkbox'){
+        const inputlabel = document.createElement('label');
+        inputlabel.textContent=title;
+        inputlabel.appendChild(input);
+        div_inpArea.appendChild(inputlabel);
+    }else{
+      input.name = title;
+      input.value = title;
+      input.textContent = title;
+      input.title = title;
+      div_inpArea.appendChild(input);
+    }
+    
+    div_inpArea.appendChild(linebreak);
+    div_inpArea.appendChild(linebreak);
+    
+    this.element.appendChild(div_inpArea);
     this.registerDisposer(this.transform.changed.add(() => this.updateView()));
     this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    checkbox.addEventListener('change',() => {
+    if(id){input.id= id;}
+    input.addEventListener('change',() => {
             this.updateModel();
             });
-    checkbox.addEventListener('mousedown', (event: MouseEvent) => {
-            event.preventDefault();
-        });
-
   }
+  
+
   private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
@@ -145,74 +154,9 @@ export class ProofOfConceptTab extends Tab {
         }else {
         (<HTMLInputElement>field).checked = false;
         }
-        //(<HTMLInputElement>field).checked = true
       }
-    }
-  /*
-    let txt1 : string= this.transform._value["prNeuronName"];
-    if(txt1){
-      this.textArea.value = '' + txt1;
-    }else {
-      this.textArea.value="";
-    }
-    let txt2 : string = this.transform._value['prCellType']
-    if(txt2){
-      this.textArea1.value = '' + txt2;
-    }else {
-      this.textArea1.value = '';
-    }
-    let txt3 : string = this.transform._value['prTags']
-    if(txt3){
-      this.textArea2.value = '' + txt3;
-    }else {
-      this.textArea2.value = '';
-    }
-    let txt4 : string = this.transform._value['prLocTags']
-    if(txt4){
-      this.textArea3.value = '' + txt4;
-    }else {
-      this.textArea3.value = '';
-    }
-    let txt5 : string = this.transform._value['prAnnotator']
-    if(txt5){
-      this.textArea4.value = '' + txt5;
-    }else {
-      this.textArea4.value = '';
-    }
-    let txt6 : string = this.transform._value['prNotes']
-    if(txt6){
-      this.textArea5.value = '' + txt6;
-    }else {
-      this.textArea5.value = '';
-    }
-    let txt7 : string = this.transform._value['prFinished']
-    if(JSON.parse(txt7)){
-      this.textArea6.checked = true;
-    }else {
-      this.textArea6.checked = false;
-    }
-    let txt8 : string = this.transform._value['prReviewed']
-    if(JSON.parse(txt8)){
-      this.textArea7.checked = true;
-    }else {
-      this.textArea7.checked = false;
-    }
-    let txt9: string = this.transform._value['prSomaLoc']
-    if(txt9){
-      this.textArea8.value = '' + txt9;
-    }else {
-      this.textArea8.value = '';
-    }
-    let txt10: string = this.transform._value['prOverrideSuperSetCheck']
-    if(JSON.parse(txt10)){
-      this.textArea9.checked = true;
-    }else {
-      this.textArea9.checked = false;
-    }*/
-    
+    }    
   }
-
-  
 
   getKeyByValue(object:Map<string, HTMLElement>, value:HTMLElement) 
      {return Object.keys(object).find(key => object.get(key) === value)};
@@ -221,21 +165,14 @@ export class ProofOfConceptTab extends Tab {
   private updateModel() {
   try
     {
-      let ta: IValue ={};
-      ta["prNeuronName"] = this.textArea.value;
-      ta['prCellType'] =this.textArea1.value;
-      ta['prTags'] =this.textArea2.value;
-      ta['prLocTags'] =this.textArea3.value;
-      ta['prAnnotator'] =this.textArea4.value;
-      ta['prNotes'] =this.textArea5.value;
-      ta['prFinished'] =String(this.textArea6.checked);
-      ta['prReviewed'] =String(this.textArea7.checked);
-      ta['prSomaLoc'] =this.textArea8.value;
-      ta['prOverrideSuperSetCheck'] =String(this.textArea9.checked);
-      
-      //let new_val: Array<IValue>= [ta,ta2];
-      this.transform._value = ta;
-      //this.transform._value=this.textArea.value;
+      for (let key in this.transform._value){
+        let field = this.m.get(key)!;
+        if(field.nodeName == 'TEXTAREA'){
+          this.transform._value[key]= (<HTMLTextAreaElement>field).value;
+        }else if(field.nodeName == 'INPUT' && (<HTMLInputElement>field).type === "checkbox"){
+          this.transform._value[key] = String((<HTMLInputElement>field).checked);
+        }       
+      }
       this.transform.changed.dispatch();
     }catch{
       this.updateView();

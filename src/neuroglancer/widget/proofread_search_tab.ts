@@ -20,7 +20,7 @@
 
 import './coordinate_transform.css';
 
-import {Neurondb, IValue} from 'neuroglancer/neurondb';
+import {Neurondb} from 'neuroglancer/neurondb';
 import {Tab} from 'neuroglancer/widget/tab_view';
 
 type titleType = 'H3' | 'label';
@@ -113,7 +113,6 @@ export class ProofreadSearchTab extends Tab {
       }
     }
   
-    
   }
   getKeyByValue(object:Map<string, HTMLElement>, value:HTMLElement) 
      {return Object.keys(object).find(key => object.get(key) === value)};
@@ -121,18 +120,12 @@ export class ProofreadSearchTab extends Tab {
   private updateModel() {
   try
     {
-      let ta: IValue ={};
-      ta["dbNeuronPrefix"] = this.dbNeuronPrefix.value;
-      ta['dbFindAnnotator'] =this.dbFindAnnotator.value;
-      ta['dbFindTags'] =this.dbFindTags.value;
-      ta['dbFindFinished'] =this.dbFindFinished.value;
-      ta['dbFindReviewed'] =this.dbFindReviewed.value;
-      ta['dbFindResult'] =this.dbFindResult.value;
-      ta['dbLoadNeuronName'] =this.dbLoadNeuronName.value;
-      
-      //let new_val: Array<IValue>= [ta,ta2];
-      this.transform._value = ta;
-      //this.transform._value=this.textArea.value;
+      for (let key in this.transform._value){
+        let field = this.m.get(key)!;
+        if(field.nodeName == 'TEXTAREA'){
+          this.transform._value[key]= (<HTMLTextAreaElement>field).value;
+        }
+      }
       this.transform.changed.dispatch();
     }catch{
       this.updateView();

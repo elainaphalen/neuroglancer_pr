@@ -25,6 +25,9 @@ import {getDefaultDataSourceProvider} from 'neuroglancer/datasource/default_prov
 import {PythonDataSource} from 'neuroglancer/datasource/python/frontend';
 import {TrackableBasedCredentialsManager} from 'neuroglancer/python_integration/credentials_provider';
 import {TrackableBasedEventActionMap} from 'neuroglancer/python_integration/event_action_map';
+
+import {getCachedJson} from 'neuroglancer/util/trackable';
+
 import {PrefetchManager} from 'neuroglancer/python_integration/prefetch';
 import {RemoteActionHandler} from 'neuroglancer/python_integration/remote_actions';
 import {TrackableBasedStatusMessages} from 'neuroglancer/python_integration/remote_status_messages';
@@ -86,6 +89,8 @@ function makeTrackableBasedSourceGenerationHandler(pythonDataSource: PythonDataS
   return state;
 }
 
+
+
 window.addEventListener('DOMContentLoaded', () => {
   const configState = new CompoundTrackable();
   const privateState = new CompoundTrackable();
@@ -105,6 +110,10 @@ window.addEventListener('DOMContentLoaded', () => {
     resetStateWhenEmpty: false,
     dataSourceProvider,
   });
+
+  //viewer.inputEventMap.set('keyq','show_button_press');
+ 
+  console.log(viewer.inputEventMap.describe);
   setDefaultInputEventBindings(viewer.inputEventBindings);
   configState.add(
       'inputEventBindings', makeTrackableBasedEventActionMaps(viewer.inputEventBindings));
@@ -164,6 +173,7 @@ window.addEventListener('DOMContentLoaded', () => {
       element.style.transformOrigin = 'top left';
     }
   };
+  
   updateSize();
   window.addEventListener('resize', updateSize);
   size.changed.add(debounce(() => updateSize(), 0));
@@ -173,7 +183,28 @@ window.addEventListener('DOMContentLoaded', () => {
       (action, state) => serverConnection.sendActionNotification(action, state));
   screenshotHandler.sendScreenshotRequested.add(
       state => serverConnection.sendActionNotification('screenshot', state));
+  
+  document.addEventListener("mousedown",()=>{
+    const ele =document.getElementById('clSetVal');
+    const cl = document.getElementById('clClear');
+    if(ele){
+        (<HTMLInputElement>ele).addEventListener('mousedown',()=>{
+          remoteActionHandler.sendActionRequested.dispatch('show_button_press',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+        })}
+    if(cl){
+        (<HTMLInputElement>cl).addEventListener('mousedown',()=>{
+          remoteActionHandler.sendActionRequested.dispatch('clClear',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+        })
+
+    }
+  })
+  
+  
+  
+  
 
   bindDefaultCopyHandler(viewer);
   bindDefaultPasteHandler(viewer);
 });
+
+

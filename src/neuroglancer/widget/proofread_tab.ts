@@ -20,10 +20,11 @@
 
 import './coordinate_transform.css';
 
-import {Proofread, IValue} from 'neuroglancer/proofread';
+import {Proofread} from 'neuroglancer/proofread';
 import {Tab} from 'neuroglancer/widget/tab_view';
 
 type titleType = 'H3' | 'label';
+type buttonType = 'checkbox'|'button';
 
 export class ProofreadTab extends Tab {
   
@@ -55,7 +56,6 @@ export class ProofreadTab extends Tab {
     this.m.set("prReviewed",this.prReviewed);
     this.m.set("prSomaLoc",this.prSomaLoc);
     this.m.set("prOverrideSuperSetCheck",this.prOverrideSuperSetCheck);
-    // this.m.set("text",this.text);
 
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
@@ -66,39 +66,46 @@ export class ProofreadTab extends Tab {
     this.addTextField(this.prLocTags,'Location Tags','H3');
     this.addTextField(this.prAnnotator,'Annotator','H3');
     this.addTextField(this.prNotes,'Notes','H3');
-    this.addCheckBox(this.prFinished,'Finished');
-    this.addCheckBox(this.prReviewed,'Reviewed');
+    this.addInputElement(this.prFinished,'Finished');
+    this.addInputElement(this.prReviewed,'Reviewed');
     this.addTextField(this.prSomaLoc,'Soma Location' ,'H3');
-    // this.addTextField(this.text,'text','H3');
-    this.addCheckBox(this.prOverrideSuperSetCheck,'Override Set Check');
-    this.updateView();
-    
-   
+    this.addInputElement(this.prOverrideSuperSetCheck,'Override Set Check');
+    this.updateView();  
   }
 
-  private addCheckBox(cb:HTMLInputElement,title:string){
+private addInputElement(inp:HTMLInputElement,title:string,type:buttonType = 'checkbox',id?:string){
     const linebreak = document.createElement("br");
-    const checkbox = cb;
-    const div_cbArea = document.createElement('DIV');
-    div_cbArea.setAttribute('align','right');
-    checkbox.type = 'checkbox';
-    const checkboxlabel = document.createElement('label');
-    checkboxlabel.textContent=title;
-    checkboxlabel.appendChild(checkbox);
-    div_cbArea.appendChild(linebreak);
-    div_cbArea.appendChild(linebreak);
-    div_cbArea.appendChild(checkboxlabel);
-    this.element.appendChild(div_cbArea);
+    const input = inp;
+    const div_inpArea = document.createElement('DIV');
+    div_inpArea.setAttribute('align','right');
+    input.type = type;
+
+    if(type === 'checkbox'){
+        const inputlabel = document.createElement('label');
+        inputlabel.textContent=title;
+        inputlabel.appendChild(input);
+        div_inpArea.appendChild(inputlabel);
+    }else{
+      input.name = title;
+      input.value = title;
+      input.textContent = title;
+      input.title = title;
+      div_inpArea.appendChild(input);
+    }
+    
+    div_inpArea.appendChild(linebreak);
+    div_inpArea.appendChild(linebreak);
+    
+    this.element.appendChild(div_inpArea);
     this.registerDisposer(this.transform.changed.add(() => this.updateView()));
     this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    checkbox.addEventListener('change',() => {
+    if(id){input.id= id;}
+    input.addEventListener('change',() => {
             this.updateModel();
             });
-    checkbox.addEventListener('mousedown', (event: MouseEvent) => {
-            event.preventDefault();
-        });
-
   }
+
+  
   private addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number =1 ){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
@@ -135,9 +142,7 @@ export class ProofreadTab extends Tab {
   
   
   private updateView() {
-   
-    for (let key in this.transform._value)
-    {
+    for (let key in this.transform._value){
       let field = this.m.get(key)!;
       let txt: string = this.transform._value[key];
       if (field.nodeName == 'TEXTAREA'){
@@ -148,7 +153,6 @@ export class ProofreadTab extends Tab {
         }else {
         (<HTMLInputElement>field).checked = false;
         }
-        //(<HTMLInputElement>field).checked = true
       }
     }
       
@@ -158,24 +162,20 @@ export class ProofreadTab extends Tab {
      {return Object.keys(object).find(key => object.get(key) === value)};
   
   private updateModel() {
-  try
-    {
-      let ta: IValue ={};
-      ta["prNeuronName"] = this.prNeuronName.value;
-      ta['prCellType'] =this.prCellType.value;
-      ta['prTags'] =this.prTags.value;
-      ta['prLocTags'] =this.prLocTags.value;
-      ta['prAnnotator'] =this.prAnnotator.value;
-      ta['prNotes'] =this.prNotes.value;
-      // ta['text'] = this.text.value;
-      if(this.prFinished.checked){ta['prFinished'] ="1"}else{ta['prFinished'] ="0"};
-      if(this.prReviewed.checked){ta['prReviewed'] ="1"}else{ta['prReviewed'] ="0"};
-      ta['prSomaLoc'] =this.prSomaLoc.value;
-      if(this.prOverrideSuperSetCheck.checked){ta['prOverrideSuperSetCheck'] ="1"}else{ta['prOverrideSuperSetCheck'] ="0"};
-      
-      //let new_val: Array<IValue>= [ta,ta2];
-      this.transform._value = ta;
-      //this.transform._value=this.textArea.value;
+  try{
+      for (let key in this.transform._value){
+        let field = this.m.get(key)!;
+        if(field.nodeName == 'TEXTAREA'){
+          this.transform._value[key]= (<HTMLTextAreaElement>field).value;
+        }else if(field.nodeName == 'INPUT' && (<HTMLInputElement>field).type === "checkbox"){
+          
+          if((<HTMLInputElement>field).checked){
+            this.transform._value[key] = '1';
+            }else{
+            this.transform._value[key] = '0';
+            }
+        }       
+      }
       this.transform.changed.dispatch();
     }catch{
       this.updateView();

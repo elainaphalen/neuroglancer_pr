@@ -19,72 +19,70 @@
  */
 
 import './coordinate_transform.css';
-
-import {Color, IValue} from 'neuroglancer/color';
+import {Color} from 'neuroglancer/color';
 import {Tab} from 'neuroglancer/widget/tab_view';
+
 
 type titleType = 'H3' | 'label';
 type buttonType = 'checkbox'|'button';
 
-
 export class ColorTab extends Tab {
-  
 
   m:Map<string,HTMLElement> = new Map();
   
   private clColVal = document.createElement('textarea');
   private clSetVal = document.createElement('input');
   private clClear = document.createElement('input');
+  
    
   constructor(public transform: Color) {
     super();
-
-    
+   
     this.m.set("set_color_val",this.clColVal);
     this.m.set("SetColorVal",this.clSetVal);
     this.m.set("Clear",this.clClear);
     
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
-
     
     this.addTextField(this.clColVal,'Color value','H3');
-    this.addCheckBox(this.clSetVal,'Set color value to selections','button');
-    this.addCheckBox(this.clClear,'Clear all colors','button');
+    this.addInputElement(this.clSetVal,'Set color value to selections','button','clSetVal');
+    this.addInputElement(this.clClear,'Clear all colors','button','clClear');
     this.updateView();   
   }
-
-
-  private addCheckBox(cb:HTMLInputElement,title:string,type:buttonType){
+  
+  private addInputElement(inp:HTMLInputElement,title:string,type:buttonType,id:string){
     const linebreak = document.createElement("br");
-    const checkbox = cb;
-    const div_cbArea = document.createElement('DIV');
-    div_cbArea.setAttribute('align','right');
-    checkbox.type = type;
+    const input = inp;
+    const div_inpArea = document.createElement('DIV');
+    div_inpArea.setAttribute('align','right');
+    input.type = type;
 
-    const checkboxlabel = document.createElement('label');
-    checkboxlabel.textContent=title;
-
-    checkboxlabel.appendChild(checkbox);
-    div_cbArea.appendChild(linebreak);
-    div_cbArea.appendChild(linebreak);
-    div_cbArea.appendChild(checkboxlabel);
-    this.element.appendChild(div_cbArea);
+    if(type === 'checkbox'){
+        const inputlabel = document.createElement('label');
+        inputlabel.textContent=title;
+        inputlabel.appendChild(input);
+        div_inpArea.appendChild(inputlabel);
+    }else{
+      input.name = title;
+      input.value = title;
+      input.textContent = title;
+      input.title = title;
+      div_inpArea.appendChild(input);
+    }
+    
+    div_inpArea.appendChild(linebreak);
+    div_inpArea.appendChild(linebreak);
+    
+    this.element.appendChild(div_inpArea);
     this.registerDisposer(this.transform.changed.add(() => this.updateView()));
     this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    checkbox.addEventListener('change',() => {
+    input.id= id;
+    input.addEventListener('change',() => {
             this.updateModel();
-
             });
-    checkbox.addEventListener('mousedown', (event: MouseEvent) => {
-            console.log("AadadaadSDa");
-            const evt = new KeyboardEvent('keydown',{'code':'0x0010'})
-            console.log(evt);
-            document.dispatchEvent(evt);
-            event.preventDefault();
-        });
-
   }
+  
   private addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number =3 ){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
@@ -119,8 +117,6 @@ export class ColorTab extends Tab {
     }
   }
   
-
-  
   private updateView() {
     for (let key in this.transform._value)
     {
@@ -135,29 +131,20 @@ export class ColorTab extends Tab {
         (<HTMLInputElement>field).checked = false;
         }
       }
-    }
-  
-    
+    }  
   }
+
   getKeyByValue(object:Map<string, HTMLElement>, value:HTMLElement) 
      {return Object.keys(object).find(key => object.get(key) === value)};
   
   private updateModel() {
-  try
-    {
-      let ta: IValue ={};
-      
-     // const evt = new KeyboardEvent('keydown',{"code":"0x0010"});
-     // if(this.clClear.checked){evt}else{ta['Clear'] ="0"};
-     // if(this.clSetVal.checked){ta['SetColorVal'] = "1"}else{ta['SetColorVal']= "0"}
-
-      ta['set_color_val'] =this.clColVal.value;
-     // ta['SetColorVal'] =this.clSetVal.value;
-      //ta['Clear'] =this.clClear.value;
-      
-      //let new_val: Array<IValue>= [ta,ta2];
-      this.transform._value = ta;
-      
+  try{
+      for (let key in this.transform._value){
+        let field = this.m.get(key)!;
+        if(field.nodeName == 'TEXTAREA'){
+          this.transform._value[key]= (<HTMLTextAreaElement>field).value;
+        }
+      }
       this.transform.changed.dispatch();
     }catch{
       this.updateView();
