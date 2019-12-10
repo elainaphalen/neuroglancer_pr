@@ -46,8 +46,8 @@ export class ColorTab extends Tab {
     element.classList.add('neuroglancer-Color-widget');
     
     this.addTextField(this.clColVal,'Color value','H3');
-    this.addInputElement(this.clSetVal,'Set color value to selections','button','clSetVal');
-    this.addInputElement(this.clClear,'Clear all colors','button','clClear');
+    this.addInputElement(this.clSetVal,'Set color to selections','button','clSetVal');
+    this.addInputElement(this.clClear,'Clear colors','button','clClear');
     this.updateView();   
   }
   

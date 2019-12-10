@@ -184,27 +184,28 @@ window.addEventListener('DOMContentLoaded', () => {
   screenshotHandler.sendScreenshotRequested.add(
       state => serverConnection.sendActionNotification('screenshot', state));
  
-
   function waitForColorTab(selector:string, time:number) {
     const ele =document.getElementById('clSetVal');
     const cl = document.getElementById('clClear');
-        if(document.querySelector(selector)!=null) {
-            if(ele){
-            (<HTMLInputElement>ele).addEventListener('mousedown',()=>{
-            remoteActionHandler.sendActionRequested.dispatch('show_button_press',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
-            })}
-          if(cl){
-            (<HTMLInputElement>cl).addEventListener('mousedown',()=>{
-            remoteActionHandler.sendActionRequested.dispatch('clClear',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+
+    if(document.querySelector(selector)!=null) {
+      if(ele){
+        (<HTMLInputElement>ele).addEventListener('mousedown',()=>{
+          remoteActionHandler.sendActionRequested.dispatch('set-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
         })
+      }
+      if(cl){
+        (<HTMLInputElement>cl).addEventListener('mousedown',()=>{
+          remoteActionHandler.sendActionRequested.dispatch('clear-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+        })
+      }
     }
-        }
-        else {
-            setTimeout(function() {
-                waitForColorTab(selector, time);
-            }, time);
-        }
+    else {
+        setTimeout(function() {
+            waitForColorTab(selector, time);
+        }, time);
     }
+  }
   
   waitForColorTab(".neuroglancer-Color-widget",1000)
 

@@ -24,6 +24,7 @@ import {Neurondb} from 'neuroglancer/neurondb';
 import {Tab} from 'neuroglancer/widget/tab_view';
 
 type titleType = 'H3' | 'label';
+type buttonType = 'checkbox'|'button';
 
 export class ProofreadSearchTab extends Tab {
   
@@ -37,6 +38,7 @@ export class ProofreadSearchTab extends Tab {
   private dbFindReviewed = document.createElement('textarea');
   private dbFindResult = document.createElement('textarea');
   private dbLoadNeuronName = document.createElement('textarea');
+  private dbNoChildren = document.createElement('input');
    
   constructor(public transform: Neurondb) {
     super();
@@ -48,6 +50,7 @@ export class ProofreadSearchTab extends Tab {
     this.m.set("dbFindReviewed",this.dbFindReviewed);
     this.m.set("dbFindResult",this.dbFindResult);
     this.m.set("dbLoadNeuronName",this.dbLoadNeuronName);
+    this.m.set("dbNoChildren",this.dbNoChildren);
     
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
@@ -59,9 +62,40 @@ export class ProofreadSearchTab extends Tab {
     this.addTextField(this.dbFindReviewed,'Reviewed','H3');
     this.addTextField(this.dbFindResult,'Result','H3', 8);
     this.addTextField(this.dbLoadNeuronName,'Load Neuron','H3');
+    this.addInputElement(this.dbNoChildren,'Load without children');
     this.updateView();
+  }
+
+private addInputElement(inp:HTMLInputElement,title:string,type:buttonType = 'checkbox',id?:string){
+    const linebreak = document.createElement("br");
+    const input = inp;
+    const div_inpArea = document.createElement('DIV');
+    div_inpArea.setAttribute('align','right');
+    input.type = type;
+
+    if(type === 'checkbox'){
+        const inputlabel = document.createElement('label');
+        inputlabel.textContent=title;
+        inputlabel.appendChild(input);
+        div_inpArea.appendChild(inputlabel);
+    }else{
+      input.name = title;
+      input.value = title;
+      input.textContent = title;
+      input.title = title;
+      div_inpArea.appendChild(input);
+    }
     
-   
+    div_inpArea.appendChild(linebreak);
+    div_inpArea.appendChild(linebreak);
+    
+    this.element.appendChild(div_inpArea);
+    this.registerDisposer(this.transform.changed.add(() => this.updateView()));
+    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
+    if(id){input.id= id;}
+    input.addEventListener('change',() => {
+            this.updateModel();
+            });
   }
 
   private addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType, rows:number = 1){
@@ -124,6 +158,13 @@ export class ProofreadSearchTab extends Tab {
         let field = this.m.get(key)!;
         if(field.nodeName == 'TEXTAREA'){
           this.transform._value[key]= (<HTMLTextAreaElement>field).value;
+        }else if(field.nodeName == 'INPUT' && (<HTMLInputElement>field).type === "checkbox"){
+          
+          if((<HTMLInputElement>field).checked){
+            this.transform._value[key] = '1';
+            }else{
+            this.transform._value[key] = '0';
+            }
         }
       }
       this.transform.changed.dispatch();

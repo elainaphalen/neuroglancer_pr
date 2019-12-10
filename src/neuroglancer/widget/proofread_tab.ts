@@ -35,6 +35,7 @@ export class ProofreadTab extends Tab {
   private prCellType = document.createElement('textarea');
   private prTags = document.createElement('textarea');
   private prLocTags = document.createElement('textarea');
+  private prUncertainCon = document.createElement('textarea');
   private prAnnotator = document.createElement('textarea');
   private prNotes = document.createElement('textarea');
   private prFinished = document.createElement('input');
@@ -50,6 +51,7 @@ export class ProofreadTab extends Tab {
     this.m.set("prCellType",this.prCellType);
     this.m.set("prTags",this.prTags);
     this.m.set("prLocTags",this.prLocTags);
+    this.m.set("prUncertainCon",this.prUncertainCon);
     this.m.set("prAnnotator",this.prAnnotator);
     this.m.set("prNotes",this.prNotes);
     this.m.set("prFinished",this.prFinished);
@@ -64,6 +66,7 @@ export class ProofreadTab extends Tab {
     this.addTextField(this.prCellType,'Cell Type','H3');
     this.addTextField(this.prTags,'Tags','H3');
     this.addTextField(this.prLocTags,'Location Tags','H3');
+    this.addTextField(this.prUncertainCon,'Uncertain Continuation','H3');
     this.addTextField(this.prAnnotator,'Annotator','H3');
     this.addTextField(this.prNotes,'Notes','H3');
     this.addInputElement(this.prFinished,'Finished');
@@ -174,7 +177,7 @@ private addInputElement(inp:HTMLInputElement,title:string,type:buttonType = 'che
             }else{
             this.transform._value[key] = '0';
             }
-        }       
+        }
       }
       this.transform.changed.dispatch();
     }catch{
