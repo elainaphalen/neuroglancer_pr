@@ -184,33 +184,40 @@ window.addEventListener('DOMContentLoaded', () => {
   screenshotHandler.sendScreenshotRequested.add(
       state => serverConnection.sendActionNotification('screenshot', state));
  
-  function waitForColorTab(selector:string, time:number) {
-    const ele =document.getElementById('clSetVal');
-    const cl = document.getElementById('clClear');
 
-    if(document.querySelector(selector)!=null) {
+
+/*
+document.addEventListener('set', () => {
+  const ele =document.getElementById('clSetVal');
+  if(document.querySelector(".neuroglancer-Color-widget")!=null) {
       if(ele){
         (<HTMLInputElement>ele).addEventListener('mousedown',()=>{
           remoteActionHandler.sendActionRequested.dispatch('set-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
         })
-      }
+      }}
+})*/
+/*document.addEventListener('clear', () => {
+  const cl = document.getElementById('clClear');
+  if(document.querySelector(".neuroglancer-Color-widget")!=null) {
       if(cl){
         (<HTMLInputElement>cl).addEventListener('mousedown',()=>{
           remoteActionHandler.sendActionRequested.dispatch('clear-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
         })
       }
-        setTimeout(function() {
-            waitForColorTab(selector, time);
-        }, time);
-    }
-    else {
-        setTimeout(function() {
-            waitForColorTab(selector, time);
-        }, time);
-    }
-  }
-  
-  waitForColorTab(".neuroglancer-Color-widget",500)
+      }
+})*/
+
+document.addEventListener('set',()=>{
+   remoteActionHandler.sendActionRequested.dispatch('set-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+})
+document.addEventListener('clear',()=>{
+  remoteActionHandler.sendActionRequested.dispatch('clear-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+})
+
+
+    
+    
+
 
   bindDefaultCopyHandler(viewer);
   bindDefaultPasteHandler(viewer);

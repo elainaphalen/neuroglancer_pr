@@ -46,6 +46,15 @@ export class ColorTab extends Atab {
     this.addTextField(this.clColVal,'Color value','H3');
     this.addInputElement(this.clSetVal,'Set color to selections','button','clSetVal');
     this.addInputElement(this.clClear,'Clear colors','button','clClear');
+    const ev = new Event('set');
+    const cl = new Event('clear')
+    this.clSetVal.addEventListener('mousedown',()=>{
+          document.dispatchEvent(ev);
+        })
+    this.clClear.addEventListener('mousedown',()=>{
+      document.dispatchEvent(cl);
+    })
+
     this.updateView();   
   }  
    
