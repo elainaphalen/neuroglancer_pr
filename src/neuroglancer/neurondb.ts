@@ -41,7 +41,8 @@ export class Neurondb implements WatchableValueInterface<IValue>{
     textArea["dbFindReviewed"]="";
     textArea["dbFindResult"]="";
     textArea["dbLoadNeuronName"]="";
-    textArea["dbLoadNeuronName"]="0";
+    textArea["dbLoadNeuronName"]="";
+    textArea["dbLoadWithoutChildren"]="1";
 
     this._value =textArea;
   }
@@ -62,7 +63,8 @@ export class Neurondb implements WatchableValueInterface<IValue>{
     empty["dbFindReviewed"]="";
     empty["dbFindResult"]="";
     empty["dbLoadNeuronName"]="";
-    empty["dbLoadNeuronName"]="0";
+    empty["dbLoadNeuronName"]="";
+    empty["dbLoadWithoutChildren"]="0";
    this._value = empty;
    this.changed.dispatch();
   }

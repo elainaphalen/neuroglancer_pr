@@ -50,7 +50,7 @@ export class ProofreadSearchTab extends Tab {
     this.m.set("dbFindReviewed",this.dbFindReviewed);
     this.m.set("dbFindResult",this.dbFindResult);
     this.m.set("dbLoadNeuronName",this.dbLoadNeuronName);
-    this.m.set("dbNoChildren",this.dbNoChildren);
+    this.m.set("dbLoadWithoutChildren",this.dbNoChildren);
     
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
@@ -139,7 +139,7 @@ private addInputElement(inp:HTMLInputElement,title:string,type:buttonType = 'che
       if (field.nodeName == 'TEXTAREA'){
         (<HTMLTextAreaElement>field).value = ''+txt;
       }else if( field.nodeName == 'INPUT'){
-        if(JSON.parse(txt)){
+        if(JSON.parse(txt)=="1"){
         (<HTMLInputElement>field).checked = true;
         }else {
         (<HTMLInputElement>field).checked = false;

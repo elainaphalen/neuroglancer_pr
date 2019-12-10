@@ -83,7 +83,7 @@ export class ColorTab extends Tab {
             });
   }
 
-  private addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number =3 ){
+  private addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number =3, cols:number =20 ){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
     div_textArea.setAttribute('align','right');
@@ -109,6 +109,7 @@ export class ColorTab extends Tab {
     txarea.addEventListener('save', () => this.updateModel());
     txarea.addEventListener('blur', () => this.updateModel());
     txarea.rows = rows;
+    txarea.cols = cols;
     try{
     txarea.id = this.getKeyByValue(this.m,tarea)!;
     }

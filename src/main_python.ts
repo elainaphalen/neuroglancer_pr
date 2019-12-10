@@ -199,6 +199,9 @@ window.addEventListener('DOMContentLoaded', () => {
           remoteActionHandler.sendActionRequested.dispatch('clear-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
         })
       }
+        setTimeout(function() {
+            waitForColorTab(selector, time);
+        }, time);
     }
     else {
         setTimeout(function() {
@@ -207,7 +210,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  waitForColorTab(".neuroglancer-Color-widget",1000)
+  waitForColorTab(".neuroglancer-Color-widget",500)
 
   bindDefaultCopyHandler(viewer);
   bindDefaultPasteHandler(viewer);
