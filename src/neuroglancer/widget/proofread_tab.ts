@@ -21,14 +21,9 @@
 import './coordinate_transform.css';
 
 import {Proofread} from 'neuroglancer/proofread';
-import {Tab} from 'neuroglancer/widget/tab_view';
+import {Atab} from 'neuroglancer/ui/AbstractTab';
 
-type titleType = 'H3' | 'label';
-type buttonType = 'checkbox'|'button';
-
-export class ProofreadTab extends Tab {
-  
-
+export class ProofreadTab extends Atab {
   m:Map<string,HTMLElement> = new Map();
   
   private prNeuronName = document.createElement('textarea');
@@ -45,7 +40,7 @@ export class ProofreadTab extends Tab {
 
  
   constructor(public transform: Proofread) {
-    super();
+    super(transform);
 
     this.m.set("prNeuronName",this.prNeuronName);
     this.m.set("prCellType",this.prCellType);
@@ -76,95 +71,7 @@ export class ProofreadTab extends Tab {
     this.updateView();  
   }
 
-private addInputElement(inp:HTMLInputElement,title:string,type:buttonType = 'checkbox',id?:string){
-    const linebreak = document.createElement("br");
-    const input = inp;
-    const div_inpArea = document.createElement('DIV');
-    div_inpArea.setAttribute('align','right');
-    input.type = type;
-
-    if(type === 'checkbox'){
-        const inputlabel = document.createElement('label');
-        inputlabel.textContent=title;
-        inputlabel.appendChild(input);
-        div_inpArea.appendChild(inputlabel);
-    }else{
-      input.name = title;
-      input.value = title;
-      input.textContent = title;
-      input.title = title;
-      div_inpArea.appendChild(input);
-    }
-    
-    div_inpArea.appendChild(linebreak);
-    div_inpArea.appendChild(linebreak);
-    
-    this.element.appendChild(div_inpArea);
-    this.registerDisposer(this.transform.changed.add(() => this.updateView()));
-    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    if(id){input.id= id;}
-    input.addEventListener('change',() => {
-            this.updateModel();
-            });
-  }
-
-  
-  private addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number =1 ){
-    const txarea = tarea;
-    const div_textArea = document.createElement('DIV');
-    div_textArea.setAttribute('align','right');
-    
-    if(type === 'label'){
-    const textAreaLabel=document.createElement('label');
-    textAreaLabel.textContent = title;
-    textAreaLabel.appendChild(txarea);
-    div_textArea.appendChild(textAreaLabel);
-    }
-    if(type === 'H3'){
-      const title_label = document.createElement('H3');
-      title_label.style.padding = '0';
-      title_label.style.margin='0';
-      title_label.appendChild(document.createTextNode(title));
-      div_textArea.appendChild(title_label);
-      div_textArea.appendChild(txarea);
-    }
-    
-    this.element.appendChild(div_textArea);
-    this.registerDisposer(this.transform.changed.add(() => this.updateView()));
-    this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    txarea.addEventListener('save', () => this.updateModel());
-    txarea.addEventListener('blur', () => this.updateModel());
-    txarea.rows = rows;
-    try{
-    txarea.id = this.getKeyByValue(this.m,tarea)!;
-    }
-    catch{
-      txarea.id = "";
-    }
-  }
-  
-  
-  private updateView() {
-    for (let key in this.transform._value){
-      let field = this.m.get(key)!;
-      let txt: string = this.transform._value[key];
-      if (field.nodeName == 'TEXTAREA'){
-        (<HTMLTextAreaElement>field).value = ''+txt;
-      }else if( field.nodeName == 'INPUT'){
-        if(JSON.parse(txt)){
-        (<HTMLInputElement>field).checked = true;
-        }else {
-        (<HTMLInputElement>field).checked = false;
-        }
-      }
-    }
-      
-  }
-
-  getKeyByValue(object:Map<string, HTMLElement>, value:HTMLElement) 
-     {return Object.keys(object).find(key => object.get(key) === value)};
-  
-  private updateModel() {
+ updateModel() {
   try{
       for (let key in this.transform._value){
         let field = this.m.get(key)!;
