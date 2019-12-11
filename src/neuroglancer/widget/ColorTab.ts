@@ -22,42 +22,28 @@ import './coordinate_transform.css';
 import {Color} from 'neuroglancer/color';
 import {Atab} from 'neuroglancer/ui/AbstractTab';
 
-
-
 export class ColorTab extends Atab {
-
   
-  
-  private clColVal = document.createElement('textarea');
+  private set_color_val = document.createElement('textarea');
   private clSetVal = document.createElement('input');
   private clClear = document.createElement('input');
-  
    
   constructor(public transform: Color) {
     super(transform);
    
-    this.m.set("set_color_val",this.clColVal);
-    this.m.set("SetColorVal",this.clSetVal);
-    this.m.set("Clear",this.clClear);
+    this.m.set("set_color_val",this.set_color_val);
+    this.m.set("clSetVal",this.clSetVal);
+    this.m.set("clClear",this.clClear);
     
     const {element} = this;
     element.classList.add('neuroglancer-Color-widget');
     
-    this.addTextField(this.clColVal,'Color value','H3');
+    this.addTextField(this.set_color_val,'Color value','H3');
     this.addInputElement(this.clSetVal,'Set color to selections','button','clSetVal');
     this.addInputElement(this.clClear,'Clear colors','button','clClear');
-    const ev = new Event('set');
-    const cl = new Event('clear')
-    this.clSetVal.addEventListener('mousedown',()=>{
-          document.dispatchEvent(ev);
-        })
-    this.clClear.addEventListener('mousedown',()=>{
-      document.dispatchEvent(cl);
-    })
 
     this.updateView();   
   }  
-   
   
  updateModel() {
   try{

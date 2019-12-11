@@ -37,12 +37,14 @@ export class Neurondb implements WatchableValueInterface<IValue>{
     textArea["dbNeuronPrefix"]= "";
     textArea["dbFindAnnotator"]="";
     textArea["dbFindTags"]="";
-    textArea["dbFindFinished"]="";
-    textArea["dbFindReviewed"]="";
+    textArea["dbFindFinished"]="0";
+    textArea["dbFindReviewed"]="0";
     textArea["dbFindResult"]="";
     textArea["dbLoadNeuronName"]="";
-    textArea["dbLoadNeuronName"]="";
-    textArea["dbLoadWithoutChildren"]="1";
+    textArea["dbLoadNeuronName1"]="";
+    textArea["dbLoadNeuronName2"]="";
+    textArea["dbLoadNeuronName3"]="";
+    textArea["dbLoadWithoutChildren"]="0";
 
     this._value =textArea;
   }
@@ -55,17 +57,19 @@ export class Neurondb implements WatchableValueInterface<IValue>{
    * Resets to the .
    */
   reset() {
-   let empty: IValue ={};
-    empty["dbNeuronPrefix"]= "";
-    empty["dbFindAnnotator"]="";
-    empty["dbFindTags"]="";
-    empty["dbFindFinished"]="";
-    empty["dbFindReviewed"]="";
-    empty["dbFindResult"]="";
-    empty["dbLoadNeuronName"]="";
-    empty["dbLoadNeuronName"]="";
-    empty["dbLoadWithoutChildren"]="0";
-   this._value = empty;
+   let textArea: IValue ={};
+    textArea["dbNeuronPrefix"]= "";
+    textArea["dbFindAnnotator"]="";
+    textArea["dbFindTags"]="";
+    textArea["dbFindFinished"]="0";
+    textArea["dbFindReviewed"]="0";
+    textArea["dbFindResult"]="";
+    textArea["dbLoadNeuronName"]="";
+    textArea["dbLoadNeuronName1"]="";
+    textArea["dbLoadNeuronName2"]="";
+    textArea["dbLoadNeuronName3"]="";
+    textArea["dbLoadWithoutChildren"]="0";
+   this._value = textArea;
    this.changed.dispatch();
   }
 

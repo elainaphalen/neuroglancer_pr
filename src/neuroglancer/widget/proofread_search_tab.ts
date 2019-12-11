@@ -32,10 +32,18 @@ export class ProofreadSearchTab extends Atab {
   private dbNeuronPrefix = document.createElement('textarea');
   private dbFindAnnotator = document.createElement('textarea');
   private dbFindTags = document.createElement('textarea');
-  private dbFindFinished = document.createElement('textarea');
-  private dbFindReviewed = document.createElement('textarea');
+  private dbFindFinished = document.createElement('input');
+  private dbFindReviewed = document.createElement('input');
   private dbFindResult = document.createElement('textarea');
+  private dbSearchButton = document.createElement('input');
   private dbLoadNeuronName = document.createElement('textarea');
+  private dbLoadNeuronName1 = document.createElement('textarea');
+  private dbLoadNeuronName2 = document.createElement('textarea');
+  private dbLoadNeuronName3 = document.createElement('textarea');
+  private dbLoadNeuronNameButton = document.createElement('input');
+  private dbLoadNeuronNameButton1 = document.createElement('input');
+  private dbLoadNeuronNameButton2 = document.createElement('input');
+  private dbLoadNeuronNameButton3 = document.createElement('input');
   private dbNoChildren = document.createElement('input');
    
   constructor(public transform: Neurondb) {
@@ -47,7 +55,15 @@ export class ProofreadSearchTab extends Atab {
     this.m.set("dbFindFinished",this.dbFindFinished);
     this.m.set("dbFindReviewed",this.dbFindReviewed);
     this.m.set("dbFindResult",this.dbFindResult);
+    this.m.set("dbSearchButton",this.dbSearchButton);
     this.m.set("dbLoadNeuronName",this.dbLoadNeuronName);
+    this.m.set("dbLoadNeuronNameButton",this.dbLoadNeuronNameButton);
+    this.m.set("dbLoadNeuronName1",this.dbLoadNeuronName1);
+    this.m.set("dbLoadNeuronNameButton1",this.dbLoadNeuronNameButton1);
+    this.m.set("dbLoadNeuronName2",this.dbLoadNeuronName2);
+    this.m.set("dbLoadNeuronNameButton2",this.dbLoadNeuronNameButton2);
+    this.m.set("dbLoadNeuronName3",this.dbLoadNeuronName3);
+    this.m.set("dbLoadNeuronNameButton3",this.dbLoadNeuronNameButton3);
     this.m.set("dbLoadWithoutChildren",this.dbNoChildren);
     
     const {element} = this;
@@ -56,11 +72,26 @@ export class ProofreadSearchTab extends Atab {
     this.addTextField(this.dbNeuronPrefix,'Prefix','H3');
     this.addTextField(this.dbFindAnnotator,'Annotator','H3');
     this.addTextField(this.dbFindTags,'Tags','H3');
-    this.addTextField(this.dbFindFinished,'Finished','H3');
-    this.addTextField(this.dbFindReviewed,'Reviewed','H3');
-    this.addTextField(this.dbFindResult,'Result','H3', 8);
+    this.addInputElement(this.dbFindFinished,'Finished');
+    this.addInputElement(this.dbFindReviewed,'Reviewed');
+
+    this.addInputElement(this.dbSearchButton,'Search','button','dbSearchButton');
+    this.addTextField(this.dbFindResult,'Result','H3', 10, 28);
+
     this.addTextField(this.dbLoadNeuronName,'Load Neuron','H3');
+    this.addInputElement(this.dbLoadNeuronNameButton,'Load','button','dbLoadNeuronNameButton');
+
+    this.addTextField(this.dbLoadNeuronName1,'','H3');
+    this.addInputElement(this.dbLoadNeuronNameButton1,'Load','button','dbLoadNeuronNameButton1');
+
+    this.addTextField(this.dbLoadNeuronName2,'','H3');
+    this.addInputElement(this.dbLoadNeuronNameButton2,'Load','button','dbLoadNeuronNameButton2');
+
+    this.addTextField(this.dbLoadNeuronName3,'','H3');
+    this.addInputElement(this.dbLoadNeuronNameButton3,'Load','button','dbLoadNeuronNameButton3');
+
     this.addInputElement(this.dbNoChildren,'Load without children');
+
     this.updateView();
   }
 

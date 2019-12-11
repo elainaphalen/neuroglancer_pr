@@ -36,7 +36,9 @@ export class ProofreadTab extends Atab {
   private prFinished = document.createElement('input');
   private prReviewed = document.createElement('input');
   private prSomaLoc = document.createElement('textarea');
+  private prSomaLocCopyLoc = document.createElement('input');
   private prOverrideSuperSetCheck = document.createElement('input');
+  private prSaveNeuron = document.createElement('input');
 
  
   constructor(public transform: Proofread) {
@@ -52,23 +54,28 @@ export class ProofreadTab extends Atab {
     this.m.set("prFinished",this.prFinished);
     this.m.set("prReviewed",this.prReviewed);
     this.m.set("prSomaLoc",this.prSomaLoc);
+    this.m.set("prSomaLocCopyLoc",this.prSomaLocCopyLoc);
     this.m.set("prOverrideSuperSetCheck",this.prOverrideSuperSetCheck);
+    this.m.set("prSaveNeuron",this.prSaveNeuron);
 
     const {element} = this;
     element.classList.add('neuroglancer-Proofread-widget');
 
-    this.addTextField(this.prNeuronName,'NeuronName','H3');
+    this.addTextField(this.prNeuronName,'Neuron Name','H3', 2);
     this.addTextField(this.prCellType,'Cell Type','H3');
     this.addTextField(this.prTags,'Tags','H3');
-    this.addTextField(this.prLocTags,'Location Tags','H3');
-    this.addTextField(this.prUncertainCon,'Uncertain Continuation','H3');
-    this.addTextField(this.prAnnotator,'Annotator','H3');
-    this.addTextField(this.prNotes,'Notes','H3');
+    this.addTextField(this.prLocTags,'Location Tags','H3', 2);
+    this.addTextField(this.prUncertainCon,'Uncertain Continuation','H3', 4);
+    this.addTextField(this.prNotes,'Notes','H3', 6);
     this.addInputElement(this.prFinished,'Finished');
     this.addInputElement(this.prReviewed,'Reviewed');
     this.addTextField(this.prSomaLoc,'Soma Location' ,'H3');
+    this.addInputElement(this.prSomaLocCopyLoc,'Copy Location','button','prSomaLocCopyLoc');
     this.addInputElement(this.prOverrideSuperSetCheck,'Override Set Check');
-    this.updateView();  
+    this.addTextField(this.prAnnotator,'Annotator','H3');
+    this.addInputElement(this.prSaveNeuron,'Save Neuron','button','prSaveNeuron');
+
+    this.updateView();
   }
 
  updateModel() {

@@ -44,13 +44,22 @@ export abstract class Atab extends Tab{
     this.element.appendChild(div_inpArea);
     this.registerDisposer(this.model.changed.add(() => this.updateView()));
     this.registerDisposer(this.visibility.changed.add(() => this.updateView()));
-    if(id){input.id= id;}
-    input.addEventListener('change',() => {
-            this.updateModel();
-            });
+    if(id){
+      input.id= id;
+    }
+
+    if (type === 'button') {
+      input.addEventListener('mousedown',()=>{
+        document.dispatchEvent(new Event(input.id));
+      })
+    } else {
+      input.addEventListener('change',() => {
+              this.updateModel();
+              });
+    }
   }
 
-   addTextField(tarea:HTMLTextAreaElement, title:string,type:titleType, rows:number = 1,cols:number =20 ){
+   addTextField(tarea:HTMLTextAreaElement, title:string, type:titleType, rows:number=1, cols:number=24){
     const txarea = tarea;
     const div_textArea = document.createElement('DIV');
     div_textArea.setAttribute('align','right');
