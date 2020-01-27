@@ -211,6 +211,9 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('dbSearchButton',()=>{
     remoteActionHandler.sendActionRequested.dispatch('search-neuron',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
   })
+  document.addEventListener('clNeuronColorButton',()=>{
+    remoteActionHandler.sendActionRequested.dispatch('clNeuronColorButton',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));
+  })
 
   bindDefaultCopyHandler(viewer);
   bindDefaultPasteHandler(viewer);

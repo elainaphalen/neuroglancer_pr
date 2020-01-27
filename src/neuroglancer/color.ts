@@ -37,6 +37,9 @@ export class Color implements WatchableValueInterface<IValue>{
     //maybe you can add to same dictionary instead of array of dictionary
     let textArea: IValue ={};
     textArea["set_color_val"]="";
+    textArea["clNeuronColor"]="";
+    textArea["clAlsoLoadNeurons"]="0";
+    textArea["clClearBeforeLoad"]="0";
 
     this._value =textArea;
   }
@@ -49,6 +52,9 @@ export class Color implements WatchableValueInterface<IValue>{
    let empty: IValue ={};
    
     empty["set_color_val"]="";
+    empty["clNeuronColor"]="";
+    empty["clAlsoLoadNeurons"]="0";
+    empty["clClearBeforeLoad"]="0";
    this._value = empty;
    this.changed.dispatch();
   }

@@ -36,6 +36,7 @@ export class Neurondb implements WatchableValueInterface<IValue>{
     let textArea: IValue ={};
     textArea["dbNeuronPrefix"]= "";
     textArea["dbFindAnnotator"]="";
+    textArea["dbFindType"]="";
     textArea["dbFindTags"]="";
     textArea["dbFindFinished"]="0";
     textArea["dbFindReviewed"]="0";
@@ -60,6 +61,7 @@ export class Neurondb implements WatchableValueInterface<IValue>{
    let textArea: IValue ={};
     textArea["dbNeuronPrefix"]= "";
     textArea["dbFindAnnotator"]="";
+    textArea["dbFindType"]="";
     textArea["dbFindTags"]="";
     textArea["dbFindFinished"]="0";
     textArea["dbFindReviewed"]="0";

@@ -31,6 +31,7 @@ export class ProofreadSearchTab extends Atab {
   
   private dbNeuronPrefix = document.createElement('textarea');
   private dbFindAnnotator = document.createElement('textarea');
+  private dbFindType = document.createElement('textarea');
   private dbFindTags = document.createElement('textarea');
   private dbFindFinished = document.createElement('input');
   private dbFindReviewed = document.createElement('input');
@@ -51,6 +52,7 @@ export class ProofreadSearchTab extends Atab {
 
     this.m.set("dbNeuronPrefix",this.dbNeuronPrefix);
     this.m.set("dbFindAnnotator",this.dbFindAnnotator);
+    this.m.set("dbFindType",this.dbFindType);
     this.m.set("dbFindTags",this.dbFindTags);
     this.m.set("dbFindFinished",this.dbFindFinished);
     this.m.set("dbFindReviewed",this.dbFindReviewed);
@@ -71,12 +73,13 @@ export class ProofreadSearchTab extends Atab {
 
     this.addTextField(this.dbNeuronPrefix,'Prefix','H3');
     this.addTextField(this.dbFindAnnotator,'Annotator','H3');
+    this.addTextField(this.dbFindType,'Type','H3');
     this.addTextField(this.dbFindTags,'Tags','H3');
     this.addInputElement(this.dbFindFinished,'Finished');
     this.addInputElement(this.dbFindReviewed,'Reviewed');
 
     this.addInputElement(this.dbSearchButton,'Search','button','dbSearchButton');
-    this.addTextField(this.dbFindResult,'Result','H3', 10, 28);
+    this.addTextField(this.dbFindResult,'Result','H3', 14, 28);
 
     this.addTextField(this.dbLoadNeuronName,'Load Neuron','H3');
     this.addInputElement(this.dbLoadNeuronNameButton,'Load','button','dbLoadNeuronNameButton');

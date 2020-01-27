@@ -31,6 +31,7 @@ export class ProofreadTab extends Atab {
   private prTags = document.createElement('textarea');
   private prLocTags = document.createElement('textarea');
   private prUncertainCon = document.createElement('textarea');
+  private prMergers = document.createElement('textarea');
   private prAnnotator = document.createElement('textarea');
   private prNotes = document.createElement('textarea');
   private prFinished = document.createElement('input');
@@ -49,6 +50,7 @@ export class ProofreadTab extends Atab {
     this.m.set("prTags",this.prTags);
     this.m.set("prLocTags",this.prLocTags);
     this.m.set("prUncertainCon",this.prUncertainCon);
+    this.m.set("prMergers",this.prMergers);
     this.m.set("prAnnotator",this.prAnnotator);
     this.m.set("prNotes",this.prNotes);
     this.m.set("prFinished",this.prFinished);
@@ -66,7 +68,8 @@ export class ProofreadTab extends Atab {
     this.addTextField(this.prTags,'Tags','H3');
     this.addTextField(this.prLocTags,'Location Tags','H3', 2);
     this.addTextField(this.prUncertainCon,'Uncertain Continuation','H3', 4);
-    this.addTextField(this.prNotes,'Notes','H3', 6);
+    this.addTextField(this.prMergers,'Merge Locations','H3', 4);
+    this.addTextField(this.prNotes,'Notes','H3', 8, 28);
     this.addInputElement(this.prFinished,'Finished');
     this.addInputElement(this.prReviewed,'Reviewed');
     this.addTextField(this.prSomaLoc,'Soma Location' ,'H3');

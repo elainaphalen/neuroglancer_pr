@@ -40,6 +40,8 @@ export class Proofread implements WatchableValueInterface<IValue>{
     textArea["prCellType"]="";
     textArea["prTags"]="";
     textArea["prLocTags"]="";
+    textArea["prUncertainCon"]="";
+    textArea["prMergers"]="";
     textArea["prAnnotator"]="";
     textArea["prNotes"]="";
     textArea["prFinished"]="false";
@@ -59,19 +61,20 @@ export class Proofread implements WatchableValueInterface<IValue>{
    * Resets to the .
    */
   reset() {
-   let empty: IValue ={};
-   empty["prNeuronName"]= "";
-    empty["prCellType"]="";
-    empty["prTags"]="";
-    empty["prLocTags"]="";
-    empty["prAnnotator"]="";
-    empty["prNotes"]="";
-    empty["prFinished"]="false";
-    empty["prReviewed"]="false";
-    empty["prSomaLoc"]="";
-    empty["prOverrideSuperSetCheck"]="false";
-    // empty['text']='';
-   this._value = empty;
+   let textArea: IValue ={};
+   textArea["prNeuronName"]= "";
+    textArea["prCellType"]="";
+    textArea["prTags"]="";
+    textArea["prLocTags"]="";
+    textArea["prUncertainCon"]="";
+    textArea["prMergers"]="";
+    textArea["prAnnotator"]="";
+    textArea["prNotes"]="";
+    textArea["prFinished"]="false";
+    textArea["prReviewed"]="false";
+    textArea["prSomaLoc"]="";
+    textArea["prOverrideSuperSetCheck"]="false";
+   this._value = textArea;
    this.changed.dispatch();
   }
 
