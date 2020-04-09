@@ -38,7 +38,10 @@ export class ProofreadTab extends Atab {
   private prReviewed = document.createElement('input');
   private prSomaLoc = document.createElement('textarea');
   private prSomaLocCopyLoc = document.createElement('input');
+  private prGrowThreshold = document.createElement('textarea');
+  private prSuperGrowThreshold = document.createElement('textarea');
   private prOverrideSuperSetCheck = document.createElement('input');
+  private prOverrideConflictCheck = document.createElement('input');
   private prSaveNeuron = document.createElement('input');
 
  
@@ -57,7 +60,10 @@ export class ProofreadTab extends Atab {
     this.m.set("prReviewed",this.prReviewed);
     this.m.set("prSomaLoc",this.prSomaLoc);
     this.m.set("prSomaLocCopyLoc",this.prSomaLocCopyLoc);
+    this.m.set("prGrowThreshold",this.prGrowThreshold);
+    this.m.set("prSuperGrowThreshold",this.prSuperGrowThreshold);
     this.m.set("prOverrideSuperSetCheck",this.prOverrideSuperSetCheck);
+    this.m.set("prOverrideConflictCheck",this.prOverrideConflictCheck);
     this.m.set("prSaveNeuron",this.prSaveNeuron);
 
     const {element} = this;
@@ -70,11 +76,14 @@ export class ProofreadTab extends Atab {
     this.addTextField(this.prUncertainCon,'Uncertain Continuation','H3', 4);
     this.addTextField(this.prMergers,'Merge Locations','H3', 4);
     this.addTextField(this.prNotes,'Notes','H3', 8, 28);
+    this.addTextField(this.prGrowThreshold,'Grow Threshold','H3');
+    this.addTextField(this.prSuperGrowThreshold,'Super Grow Threshold','H3');
     this.addInputElement(this.prFinished,'Finished');
     this.addInputElement(this.prReviewed,'Reviewed');
     this.addTextField(this.prSomaLoc,'Soma Location' ,'H3');
     this.addInputElement(this.prSomaLocCopyLoc,'Copy Location','button','prSomaLocCopyLoc');
     this.addInputElement(this.prOverrideSuperSetCheck,'Override Set Check');
+    this.addInputElement(this.prOverrideConflictCheck,'Override Conflict Check');
     this.addTextField(this.prAnnotator,'Annotator','H3');
     this.addInputElement(this.prSaveNeuron,'Save Neuron','button','prSaveNeuron');
 

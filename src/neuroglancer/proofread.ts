@@ -48,7 +48,9 @@ export class Proofread implements WatchableValueInterface<IValue>{
     textArea["prReviewed"]="false";
     textArea["prSomaLoc"]="";
     textArea["prOverrideSuperSetCheck"]="false";
-    // textArea['text']="";
+    textArea["prOverrideConflictCheck"]="false";
+    textArea["prGrowThreshold"]="";
+    textArea["prSuperGrowThreshold"]="";
 
     this._value =textArea;
   }
@@ -74,6 +76,9 @@ export class Proofread implements WatchableValueInterface<IValue>{
     textArea["prReviewed"]="false";
     textArea["prSomaLoc"]="";
     textArea["prOverrideSuperSetCheck"]="false";
+    textArea["prOverrideConflictCheck"]="false";
+    textArea["prGrowThreshold"]="";
+    textArea["prSuperGrowThreshold"]="";
    this._value = textArea;
    this.changed.dispatch();
   }
