@@ -16,7 +16,9 @@
 
 import {eventHasInputTextTarget} from 'neuroglancer/util/clipboard';
 import {vec3} from 'neuroglancer/util/geom';
-import {getCachedJson} from 'neuroglancer/util/trackable';
+import {vec3Key} from 'neuroglancer/util/geom';
+import {vec3Div} from 'neuroglancer/util/geom';
+// import {getCachedJson} from 'neuroglancer/util/trackable';
 import {Viewer} from 'neuroglancer/viewer';
 
 export function bindDefaultCopyHandler(viewer: Viewer) {
@@ -24,12 +26,24 @@ export function bindDefaultCopyHandler(viewer: Viewer) {
     if (eventHasInputTextTarget(event)) {
       return;
     }
+
+    const {mouseState} = viewer;
+    const {clipboardData} = event;
+    if (mouseState.updateUnconditionally()) {
+      if (clipboardData !== null) {
+        clipboardData.setData('text/plain', vec3Key(vec3Div(mouseState.position, viewer.navigationState.voxelSize.size)));
+      }
+    }
+    event.preventDefault();
+
+    /*
     const stateJson = getCachedJson(viewer.state).value;
     const {clipboardData} = event;
     if (clipboardData !== null) {
       clipboardData.setData('text/plain', JSON.stringify(stateJson, undefined, '  '));
     }
     event.preventDefault();
+    */
   });
 }
 

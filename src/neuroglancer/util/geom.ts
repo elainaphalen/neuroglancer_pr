@@ -53,6 +53,10 @@ export function vec3Key(x: ArrayLike<number>) {
   return `${x[0]},${x[1]},${x[2]}`;
 }
 
+export function vec3Div(x: ArrayLike<number>, y: ArrayLike<number>) {
+  return vec3.fromValues(x[0]/y[0], x[1]/y[1], x[2]/y[2]);
+}
+
 const RECTIFY_EPSILON = 1e-4;
 
 export function rectifyVec3IfAxisAligned(v: Float32Array, offset: number) {
