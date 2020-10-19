@@ -903,7 +903,7 @@ def data_panel_layout_wrapper(default_value='xy'):
     return wrapper
 
 
-data_panel_layout_types = frozenset(['xy', 'yz', 'yz', 'xy-3d', 'yz-3d', 'yz-3d', '4panel', '3d'])
+data_panel_layout_types = frozenset(['xy', 'yz', 'xz', 'xy-3d', 'yz-3d', 'xz-3d', '4panel', '3d'])
 
 
 def layout_specification(x, _readonly=False):
@@ -1038,8 +1038,8 @@ class StatisticsDisplayState(JsonObjectWrapper):
 class ViewerState(JsonObjectWrapper):
     __slots__ = ()
     dimensions = wrapped_property('dimensions', CoordinateSpace)
-    dimensionRenderScales = dimension_render_scales = wrapped_property('dimensionRenderScales', optional(typed_string_map(float)))
-    render_dimensions = renderDimensions = wrapped_property('renderDimensions', optional(typed_list(text_type)))
+    relative_display_scales = relativeDisplayScales = wrapped_property('relativeDisplayScales', optional(typed_string_map(float)))
+    display_dimensions = displayDimensions = wrapped_property('displayDimensions', optional(typed_list(text_type)))
     position = voxel_coordinates = wrapped_property('position', optional(array_wrapper(np.float32)))
     cross_section_orientation = crossSectionOrientation = wrapped_property(
         'crossSectionOrientation', optional(array_wrapper(np.float32, 4)))
@@ -1065,6 +1065,9 @@ class ViewerState(JsonObjectWrapper):
         'projectionBackgroundColor', optional(text_type))
     selected_layer = selectedLayer = wrapped_property('selectedLayer', SelectedLayerState)
     statistics = wrapped_property('statistics', StatisticsDisplayState)
+    partial_viewport = partialViewport = wrapped_property(
+        'partialViewport',
+        optional(array_wrapper(np.float64, 4), np.array([0, 0, 1, 1], dtype=np.float64)))
 
     @staticmethod
     def interpolate(a, b, t):

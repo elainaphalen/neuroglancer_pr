@@ -97,6 +97,12 @@ const DEFAULT_DATA_SOURCES = exports.DEFAULT_DATA_SOURCES = [
       'neuroglancer/async_computation/vtk_mesh',
     ],
   },
+  {
+    source: 'neuroglancer/datasource/obj',
+    asyncComputation: [
+      'neuroglancer/async_computation/obj_mesh',
+    ],
+  },
 ];
 
 const DEFAULT_SUPPORTED_LAYERS = exports.DEFAULT_SUPPORTED_LAYERS = [
@@ -405,10 +411,12 @@ function getViewerConfig(options) {
             ...extraFrontendPlugins,
             ...commonPlugins,
             ...extraCommonPlugins,
-            new CopyWebpackPlugin([{
-              from: resolveReal(srcDir, 'neuroglancer/datasource/boss/bossauth.html'),
-              to: 'bossauth.html'
-            }]),
+            new CopyWebpackPlugin({
+              patterns: [{
+                from: resolveReal(srcDir, 'neuroglancer/datasource/boss/bossauth.html'),
+                to: 'bossauth.html'
+              }],
+            }),
           ],
         },
         baseConfig),

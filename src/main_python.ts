@@ -176,6 +176,8 @@ window.addEventListener('DOMContentLoaded', () => {
       (action, state) => serverConnection.sendActionNotification(action, state));
   screenshotHandler.sendScreenshotRequested.add(
       state => serverConnection.sendActionNotification('screenshot', state));
+  screenshotHandler.sendStatisticsRequested.add(
+      state => serverConnection.sendActionNotification('screenshotStatistics', state));
 
   document.addEventListener('clSetVal',()=> {
     remoteActionHandler.sendActionRequested.dispatch('set-color',JSON.parse(JSON.stringify(getCachedJson(viewer.state).value)));

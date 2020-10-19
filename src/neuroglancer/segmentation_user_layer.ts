@@ -773,11 +773,13 @@ class DisplayOptionsTab extends Tab {
 
           const codeWidget = refCounted.registerDisposer(makeSkeletonShaderCodeWidget(this.layer));
           parent.appendChild(codeWidget.element);
-          parent.appendChild(
-              refCounted
-                  .registerDisposer(new ShaderControls(
-                      layer.displayState.skeletonRenderingOptions.shaderControlState))
-                  .element);
+          parent.appendChild(refCounted
+                                 .registerDisposer(new ShaderControls(
+                                     layer.displayState.skeletonRenderingOptions.shaderControlState,
+                                     this.layer.manager.root.display, {
+                                       visibility: this.visibility,
+                                     }))
+                                 .element);
           codeWidget.textEditor.refresh();
         }, this.visibility));
     element.appendChild(skeletonControls.element);
@@ -1318,6 +1320,8 @@ class ShaderCodeOverlay extends Overlay {
 registerLayerType('segmentation', SegmentationUserLayer);
 registerVolumeLayerType(VolumeType.SEGMENTATION, SegmentationUserLayer);
 registerLayerTypeDetector(subsource => {
-  if (subsource.mesh !== undefined) return SegmentationUserLayer;
+  if (subsource.mesh !== undefined) {
+    return {layerConstructor: SegmentationUserLayer, priority: 1};
+  }
   return undefined;
 });
